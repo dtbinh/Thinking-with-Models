@@ -1,0 +1,4 @@
+# leave out video files
+*.swf
+
+*~
