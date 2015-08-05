@@ -40,7 +40,7 @@ public class NetLogoBridge {
      * @param command: The value to report.
      * @return Floating point number
      */
-    public Object report(String command, String type) {
+    public Object report(String command) {
     	try {
             return ws.report(command);
           //   if (type.equals("d")) {

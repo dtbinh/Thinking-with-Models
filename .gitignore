@@ -1,4 +1,8 @@
 # leave out video files
 *.swf
 
+leave out working files
 *~
+
+# leave out answer files
+answers_*

@@ -2,161 +2,164 @@ from py4j.java_gateway import JavaGateway
 import matplotlib.pyplot as plt
 from os import listdir
 
-# Global variables
-data_fields = {}
-
-# def Setup data_fields
-def setup():
-    global data_fields 
-    data_fields = {
-            '1 3' : {'global' : ('min-pxcor', 'max-pxcor', 'min-pycor', 'max-pycor'), 
-            'turtle' : ('color', 'heading', 'xcor', 'ycor'), 'patch' : ('pcolor', )}
-            }
-
-# def run_model(bridge, density, steps):
-def test1(bridge):
-    '''
-    Run the forest fire model, and return the number of trees burned.
-     
-    Args:
-        bridge: The NetLogoBridge Java object
-        density: Integer density percent, from 0 to 100
-        steps: How many steps to run 
-     
-    Returns:
-        The number of trees burned, as a float.
-    '''
-    # bridge.command("set density " + str(density))
-    # bridge.command("setup")
-    # bridge.command("repeat " + str(steps) + " [go]")
-    bridge.command("setup1")
-    bridge.command("go1")
-    # return "fuck you"
-    return bridge.report("[pycor] of turtle 0", "d") == 10.0
-
-def test2(bridge):
-    '''
-
-    '''
-    passed = True
-    bridge.command("setup2")
-    passed = (passed and bridge.report("count turtles", "d") == 4 and
-            bridge.report("[count turtles-here] of patch 10 10", "d") == 1 and
-            bridge.report("[count turtles-here] of patch -10 10", "d") == 1 and
-            bridge.report("[count turtles-here] of patch 10 -10", "d") == 1 and
-            bridge.report("[count turtles-here] of patch -10 -10", "d") == 1)
-    # Need to check headings too
-    for i in range(9):
-        bridge.command("go2")
-        passed = (passed and bridge.report("count turtles", "d") == 4 and
-                bridge.report(
-                "[count turtles-here] of patch {0} {0}".format(9-i), "d") == 1 and
-                bridge.report(
-                "[count turtles-here] of patch -{0} {0}".format(9-i), "d") == 1 and
-                bridge.report(
-                "[count turtles-here] of patch {0} -{0}".format(9-i), "d") == 1 and
-                bridge.report(
-                "[count turtles-here] of patch -{0} -{0}".format(9-i), "d") == 1)
-        if not passed: print 'failure: ', i
-        # print bridge.report("[xcor] of turtle 0", "d"), bridge.report("[ycor] of turtle 0", "d")
-    bridge.command("go2")
-    passed = (passed and bridge.report("count turtles", "d") == 4 and
-            bridge.report("[count turtles-here] of patch 0 0", "d") == 4)
-    return passed
-
-def test3(bridge, student_name):
-    passed = True
-    bridge.command('export-world \
-            (word "{0}-1-3-" date-and-time ".csv")'.format(student_name))
-    return passed
+# Global variables:
+# The fields to record/check for each homework problem.
+data_fields = {
+        '1 1' : {'global' : (), 'turtle' : ('heading', 'xcor', 'ycor'), 
+        'patch' : ('pcolor', )},
+        '1 2' : {'global' : (), 'turtle' : ('color', 'heading', 'xcor', 
+        'ycor'), 'patch' : ('pcolor', )},
+        '1 3' : {'global' : (), 'turtle' : ('color', 'heading', 'xcor', 
+        'ycor'), 'patch' : ('pcolor', )}
+        }
+# The recording/checking order for each homework problem.
+problem_order = {
+        '1 1': ['setup1', '*', 'go1', '*'],
+        '1 2': ['setup2', '*', 'repeat 10 [go2]', '*'],
+        '1 3': ['setup3', '*', 'repeat 50 [go3]', '*']
+        }
+# The number of problems in each problem set.
+hw_data = {1 : 3}
+# Default read/write directory
+default_dir = ("/home/joel/Dropbox/Research/Philosophy of Science/" + 
+        "Thinking with Models/Thinking-with-Models/")
 
 def roughly_equal(val1, val2, error=.01):
+    '''
+    Checks whether two numbers are equal within an error margin.
+    Args:
+        val1: the first value
+        val2: the second value
+        error: the allowed error margin (default .01)
+    Returns:
+        A boolean which is true if the numbers are within the margin
+    '''
     return abs(val1-val2) < error
 
-# look into writing to a csv (doesn't matter too much)
-# fix so report only needs one parameter
 def write_values(bridge, hw_number, problem_number, record_number):
-    # print data_fields
+    '''
+    Record the values given in data_fields from a given open model.
+    Args:
+        bridge: The NetLogo Java object (must have an open model)
+        hw_number: the homework number
+        problem_number: the problem number
+        record_number: the number of the file for this homework and problem
+    '''
     # Open the write file and the correct dictionary of fields to write.
-    answers = open('answers_{0}_{1}_{2}.txt'.format(hw_number, problem_number, record_number), 
-            'w')
+    answers = open('answers_{0}_{1}_{2}.txt'.format(hw_number, problem_number, 
+            record_number), 'w')
     fields = data_fields['{0} {1}'.format(hw_number, problem_number)]
     # Get necessary reporting info.
-    num_turtles = int(bridge.report('count turtles', 'd'))
-    min_pxcor = int(bridge.report('min-pxcor', 'd'))
-    min_pycor = int(bridge.report('min-pycor', 'd'))
-    max_pxcor = int(bridge.report('max-pxcor', 'd'))
-    max_pycor = int(bridge.report('max-pycor', 'd'))
+    num_turtles = int(bridge.report('count turtles'))
+    min_pxcor = int(bridge.report('min-pxcor'))
+    min_pycor = int(bridge.report('min-pycor'))
+    max_pxcor = int(bridge.report('max-pxcor'))
+    max_pycor = int(bridge.report('max-pycor'))
     # Write in globals.
     for f in fields['global']:
-        # print f
-        # w = bridge.report('{0}'.format(f), 'd')
-        # print w, type(w)
-        answers.write(str(bridge.report('{0}'.format(f), 'd'))+', ')
+        answers.write(str(bridge.report('{0}'.format(f)))+', ')
     answers.write('\n')
-    # Write in turtle variables
+    # Write in turtle variables.
     for i in range(num_turtles):
         for f in fields['turtle']:
-            answers.write(str(bridge.report('[{0}] of turtle {1}'.format(f, i), 'd'))+', ')
+            answers.write(str(bridge.report(
+                    '[{0}] of turtle {1}'.format(f, i)))+', ')
         answers.write('\n')
-    # Write in patch variables
+    # Write in patch variables.
     for x in range(min_pxcor, max_pxcor):
         for y in range(min_pycor, max_pycor):
             for f in fields['patch']:
-                answers.write(str(bridge.report('[{0}] of patch {1} {2}'.format(f, x, y), 'd'))+', ')
+                answers.write(str(bridge.report(
+                        '[{0}] of patch {1} {2}'.format(f, x, y)))+', ')
             answers.write('\n')
+    # Close the file.
     answers.close()
 
 # The procedure for when to run what and record what -- will want to make this a field.
-def record_answers(bridge, hw_number):
-    bridge.command('random-seed 17638974') # used nlogo's new-seed to get
-    bridge.command('setup3')
-    write_values(bridge, hw_number, 3, 0)
-    bridge.command('repeat 50 [go3]')
-    write_values(bridge, hw_number, 3, 1)
+def record_hw_answers(hw_number, hw_problem=-1, directory=default_dir):
+    '''
+    Records the necessary .txt answer files for the given homework number
+    or problem.
+    Args:
+        hw_number: the hw number
+        hw_problem: the hw problem number (default -1 records all problems)
+        directory: the directory with the answer .nlogo file
+    '''
+    # Create a new gateway connection.
+    gw = JavaGateway() 
+    # Create the actual NetLogoBridge object and open answer model.
+    bridge = gw.entry_point
+    bridge.openModel(directory+'hw_{0}_answers.nlogo'.format(hw_number))
+    # Record the answers for either all the problems (-1) or the given one.
+    if hw_problem == -1:
+        for prob in range(hw_data[hw_number]):
+            record_problem_answers(bridge, hw_number, prob+1)
+            bridge.command('ca')
+    else:
+        record_problem_answers(bridge, hw_number, hw_problem)
+
+def record_problem_answers(bridge, hw_number, hw_problem):
+    '''
+    Records the necessary .txt answer files for the given homework problem.
+    Args:
+        bridge: the open NetLogo java file with open model
+        hw_number: the hw number
+        hw_problem: the hw problem number (default -1 records all problems)
+    '''
+    # Seed the model (used nlogo's new-seed to get)
+    bridge.command('random-seed 17638974') 
+    # Counter for the answer files
+    record_number = 1
+    for order in problem_order['{0} {1}'.format(hw_number, hw_problem)]:
+        if order == '*':
+            write_values(bridge, hw_number, hw_problem, record_number)
+            record_number += 1
+        else:
+            bridge.command(order)
 
 def check_values(bridge, hw_number, problem_number, record_number):
+    '''
+    Check the values of this model against the given answer file.
+    Args:
+        bridge: a NetLogo java file with open model
+        hw_number: the homework number
+        problem_number: the problem number
+        record_number: the number of the file for this hw and problem
+    Returns:
+        A boolean which is true if the values are all the same as the answers
+    '''
+    # Set boolean for pass condition
     passed = True
-    # Open the write file and the correct dictionary of fields to write.
-    answers = open('answers_{0}_{1}_{2}.txt'.format(hw_number, problem_number, record_number), 
-            'r')
+    # Open the answer file and the correct dictionary of fields to write.
+    answers = open('answers_{0}_{1}_{2}.txt'.format(hw_number, problem_number, 
+        record_number), 'r')
     fields = data_fields['{0} {1}'.format(hw_number, problem_number)]
-    # Get necessary reporting info.
-    num_turtles = int(bridge.report('count turtles', 'd'))
-    min_pxcor = int(bridge.report('min-pxcor', 'd'))
-    min_pycor = int(bridge.report('min-pycor', 'd'))
-    max_pxcor = int(bridge.report('max-pxcor', 'd'))
-    max_pycor = int(bridge.report('max-pycor', 'd'))
-    # Write in globals.
+    # Get necessary checking info.
+    num_turtles = int(bridge.report('count turtles'))
+    min_pxcor = int(bridge.report('min-pxcor'))
+    min_pycor = int(bridge.report('min-pycor'))
+    max_pxcor = int(bridge.report('max-pxcor'))
+    max_pycor = int(bridge.report('max-pycor'))
+    # Read in answer line and check globals.
     g = answers.readline().strip(' ,\n').split(', ')
-    # print g
     for i, f in enumerate(fields['global']):
-        # print f
-        # w = bridge.report('{0}'.format(f), 'd')
-        # print w, type(w)
-        passed = passed and str(bridge.report('{0}'.format(f), 'd')) == g[i]
-        # if passed == False: print g
-    # answers.write('\n')
-    # Write in turtle variables
+        passed = passed and str(bridge.report('{0}'.format(f))) == g[i]
+    # Check turtle variables, reading lines one turtle at a time.
     for i in range(num_turtles):
-        t = answers.readline().strip(' ,\n').split(', ')
-        # print t
+        ans = answers.readline().strip(' ,\n').split(', ')
         for j, f in enumerate(fields['turtle']):
-            c = str(bridge.report('[{0}] of turtle {1}'.format(f, i), 'd'))
-            # print f, c
-            passed = passed and c == t[j]
-            # if passed == False: print 't', t[i], 'c', c
-        # answers.write('\n')
-    # # Write in patch variables
+            val = str(bridge.report('[{0}] of turtle {1}'.format(f, i)))
+            passed = passed and val == ans[j]
+    # Check patch variables, reading lines one patch at a time.
     for x in range(min_pxcor, max_pxcor):
         for y in range(min_pycor, max_pycor):
             p = answers.readline().strip(' ,\n').split(', ')
             for i, f in enumerate(fields['patch']):
-                c = str(bridge.report('[{0}] of patch {1} {2}'.format(f, x, y), 'd'))
+                c = str(bridge.report('[{0}] of patch {1} {2}'.format(f, x, y)))
                 passed = passed and c == p[i]
-                # if passed == False: print p
-            # answers.write('\n')
+    # Close the answer file.
     answers.close()
+    # Return true if all values were equal.
     return passed
 
 def check_answers(bridge, hw_number):
@@ -168,62 +171,38 @@ def check_answers(bridge, hw_number):
     passes.append(check_values(bridge, hw_number, 3, 1))
     return passes
 
-def run_tests(directory): 
+def check_hw(hw_number, directory=default_dir): 
     '''
-    Run all the tests for each homework file in the directory.
+    Run all the tests for each student homework file in the directory.
 
     Args:
-        directory: The directory in which to find the .nlogo files.
+        directory: The directory in which to find the .nlogo files
 
     Returns:
-        A list of each student's performance on each test.
+        A list of each student's performance on each problem.
     '''
-    gw = JavaGateway() # Create a new gateway connection.
-    bridge = gw.entry_point # Create the actual NetLogoBridge object.
+    # Create a new gateway connection.
+    gw = JavaGateway() 
+    # Create the actual NetLogoBridge object.
+    bridge = gw.entry_point 
 
-    setup()
-
-    # Path to directory with hw_1 files.
-    hw_1_directory = ("/home/joel/Dropbox/Research/Philosophy of Science/" +
-            "Thinking with Models/Thinking-with-Models/")
-    hw_1_files = [x for x in listdir(hw_1_directory) 
-            if "hw_1_" in x and ".nlogo" in x]
-    # Do each student one by one.
+    # Get a list of all the homework files in the directory and store grades.
+    hw_files = [x for x in listdir(directory) 
+            if "hw_{0}_".format(hw_number) in x and ".nlogo" in x]
+    hw_grade = {}
+    # Check each student's file one by one.
     for f in hw_1_files:
-    # print hw_1_files[0], hw_1_directory + hw_1_files[0]
-        # Open the model file.
+        # Get the student's name and open the model file.
         student_name = f[f.rindex('_')+1:f.rindex('.')]
         bridge.openModel(hw_1_directory + f)
+        # Check each problem.
+        student_grades = {}
+        for i in range(hw_data[hw_number]):
+            check_answers(bridge, 1)
 
-        # Will need some error control in here
-        # Run the necessary steps and export the world 
-
-        # 
-        # bridge.command('setup3')
-        # write_values(bridge, 1, 3, 0)
-
-        # record_answers(bridge, 1)
-        print check_answers(bridge, 1)
-
-
-        # print "Student: ", student_name
-        # print "1: ", test1(bridge)
-        # print "2: ", test2(bridge)
-        # print "3: ", test3(bridge, student_name)
+        hw_grade[student_name] = student_grades
 
     # Dispose of the thread.
     bridge.dispose()
-
-    return 
-
-    # for f in hw_1_files:
-    #     bridge.openModel(hw_1_directory + f)
-
-
-    # burned_trees = [run_model(bridge, i, 100) for i in range(0,100)]
-    # fig, ax = plt.subplots(figsize=(8,6))
-    # ax.grid(True)
-    # ax.set_xlabel("% Density")
-    # ax.set_ylabel("# of Trees Burned")
-    # plt.plot(burned_trees, linewidth=2)
-    # plt.show()
+    # Return the grades for the homework as a dictionary.
+    return hw_grade
