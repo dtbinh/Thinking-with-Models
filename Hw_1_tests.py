@@ -5,21 +5,19 @@ from os import listdir
 # Global variables:
 # The fields to record/check for each homework problem.
 data_fields = {
-        '1 1' : {'global' : (), 'turtle' : ('heading', 'xcor', 'ycor'), 
+        1 : { 1 : {'global' : (), 'turtle' : ('heading', 'xcor', 'ycor'), 
         'patch' : ('pcolor', )},
-        '1 2' : {'global' : (), 'turtle' : ('color', 'heading', 'xcor', 
+        2 : {'global' : (), 'turtle' : ('color', 'heading', 'xcor', 
         'ycor'), 'patch' : ('pcolor', )},
-        '1 3' : {'global' : (), 'turtle' : ('color', 'heading', 'xcor', 
-        'ycor'), 'patch' : ('pcolor', )}
+        3 : {'global' : (), 'turtle' : ('color', 'heading', 'xcor', 
+        'ycor'), 'patch' : ('pcolor', )}}
         }
 # The recording/checking order for each homework problem.
 problem_order = {
-        '1 1': ['setup1', '*', 'go1', '*'],
-        '1 2': ['setup2', '*', 'repeat 10 [go2]', '*'],
-        '1 3': ['setup3', '*', 'repeat 50 [go3]', '*']
+        1 : { 1 : ['setup1', '*', 'go1', '*'],
+        2 : ['setup2', '*', 'repeat 10 [go2]', '*'],
+        3 : ['setup3', '*', 'repeat 50 [go3]', '*'] }
         }
-# The number of problems in each problem set.
-hw_data = {1 : 3}
 # Default read/write directory
 default_dir = ("/home/joel/Dropbox/Research/Philosophy of Science/" + 
         "Thinking with Models/Thinking-with-Models/")
@@ -48,7 +46,7 @@ def write_values(bridge, hw_number, problem_number, record_number):
     # Open the write file and the correct dictionary of fields to write.
     answers = open('answers_{0}_{1}_{2}.txt'.format(hw_number, problem_number, 
             record_number), 'w')
-    fields = data_fields['{0} {1}'.format(hw_number, problem_number)]
+    fields = data_fields[hw_number][problem_number]
     # Get necessary reporting info.
     num_turtles = int(bridge.report('count turtles'))
     min_pxcor = int(bridge.report('min-pxcor'))
@@ -75,14 +73,33 @@ def write_values(bridge, hw_number, problem_number, record_number):
     # Close the file.
     answers.close()
 
-# The procedure for when to run what and record what -- will want to make this a field.
-def record_hw_answers(hw_number, hw_problem=-1, directory=default_dir):
+def record_problem_answers(bridge, hw_number, problem_number):
+    '''
+    Helper method that records the necessary .txt answer files for the given 
+    homework problem.
+    Args:
+        bridge: the open NetLogo java file with open model
+        hw_number: the hw number
+        problem_number: the hw problem number (default -1 records all problems)
+    '''
+    # Seed the model (used nlogo's new-seed to get)
+    bridge.command('random-seed 17638974') 
+    # Counter for the answer files
+    record_number = 1
+    for order in problem_order[hw_number][problem_number]:
+        if order == '*':
+            write_values(bridge, hw_number, problem_number, record_number)
+            record_number += 1
+        else:
+            bridge.command(order)
+
+def record_hw_answers(hw_number, problem_number=-1, directory=default_dir):
     '''
     Records the necessary .txt answer files for the given homework number
     or problem.
     Args:
         hw_number: the hw number
-        hw_problem: the hw problem number (default -1 records all problems)
+        problem_number: the hw problem number (default -1 records all problems)
         directory: the directory with the answer .nlogo file
     '''
     # Create a new gateway connection.
@@ -91,31 +108,12 @@ def record_hw_answers(hw_number, hw_problem=-1, directory=default_dir):
     bridge = gw.entry_point
     bridge.openModel(directory+'hw_{0}_answers.nlogo'.format(hw_number))
     # Record the answers for either all the problems (-1) or the given one.
-    if hw_problem == -1:
-        for prob in range(hw_data[hw_number]):
+    if problem_number == -1:
+        for prob in range(len(data_fields[hw_number])):
             record_problem_answers(bridge, hw_number, prob+1)
             bridge.command('ca')
     else:
-        record_problem_answers(bridge, hw_number, hw_problem)
-
-def record_problem_answers(bridge, hw_number, hw_problem):
-    '''
-    Records the necessary .txt answer files for the given homework problem.
-    Args:
-        bridge: the open NetLogo java file with open model
-        hw_number: the hw number
-        hw_problem: the hw problem number (default -1 records all problems)
-    '''
-    # Seed the model (used nlogo's new-seed to get)
-    bridge.command('random-seed 17638974') 
-    # Counter for the answer files
-    record_number = 1
-    for order in problem_order['{0} {1}'.format(hw_number, hw_problem)]:
-        if order == '*':
-            write_values(bridge, hw_number, hw_problem, record_number)
-            record_number += 1
-        else:
-            bridge.command(order)
+        record_problem_answers(bridge, hw_number, problem_number)
 
 def check_values(bridge, hw_number, problem_number, record_number):
     '''
@@ -133,7 +131,7 @@ def check_values(bridge, hw_number, problem_number, record_number):
     # Open the answer file and the correct dictionary of fields to write.
     answers = open('answers_{0}_{1}_{2}.txt'.format(hw_number, problem_number, 
         record_number), 'r')
-    fields = data_fields['{0} {1}'.format(hw_number, problem_number)]
+    fields = data_fields[hw_number][problem_number]
     # Get necessary checking info.
     num_turtles = int(bridge.report('count turtles'))
     min_pxcor = int(bridge.report('min-pxcor'))
@@ -162,22 +160,32 @@ def check_values(bridge, hw_number, problem_number, record_number):
     # Return true if all values were equal.
     return passed
 
-def check_answers(bridge, hw_number):
-    passes = []
-    bridge.command('random-seed 17638974') # need to make seed a global
-    bridge.command('setup3')
-    passes.append(check_values(bridge, hw_number, 3, 0))
-    bridge.command('repeat 50 [go3]')
-    passes.append(check_values(bridge, hw_number, 3, 1))
-    return passes
+def check_problem_answers(bridge, hw_number, problem_number):
+    '''
+    Helper method that checks the answers for a specific problem.
+    Args:
+    Returns:
+    '''
+    # Set up the passed variable
+    passed = []
+    # Seed the model (used nlogo's new-seed to get)
+    bridge.command('random-seed 17638974') 
+    # Counter for the answer files
+    record_number = 1
+    for order in problem_order[hw_number][problem_number]:
+        if order == '*':
+            passed.append(check_values(
+                    bridge, hw_number, problem_number, record_number))
+            record_number += 1
+        else:
+            bridge.command(order)
+    return passed
 
-def check_hw(hw_number, directory=default_dir): 
+def check_hw_answers(hw_number, directory=default_dir): 
     '''
     Run all the tests for each student homework file in the directory.
-
     Args:
         directory: The directory in which to find the .nlogo files
-
     Returns:
         A list of each student's performance on each problem.
     '''
@@ -188,20 +196,20 @@ def check_hw(hw_number, directory=default_dir):
 
     # Get a list of all the homework files in the directory and store grades.
     hw_files = [x for x in listdir(directory) 
-            if "hw_{0}_".format(hw_number) in x and ".nlogo" in x]
+            if "hw_{0}_".format(hw_number) in x and ".nlogo" in x 
+            and not 'answers' in x]
     hw_grade = {}
     # Check each student's file one by one.
-    for f in hw_1_files:
+    for f in hw_files:
         # Get the student's name and open the model file.
         student_name = f[f.rindex('_')+1:f.rindex('.')]
-        bridge.openModel(hw_1_directory + f)
+        bridge.openModel(directory + f)
         # Check each problem.
         student_grades = {}
-        for i in range(hw_data[hw_number]):
-            check_answers(bridge, 1)
-
+        for i in range(len(data_fields[hw_number])):
+            student_grades[i+1] = check_problem_answers(
+                    bridge, hw_number, i+1)
         hw_grade[student_name] = student_grades
-
     # Dispose of the thread.
     bridge.dispose()
     # Return the grades for the homework as a dictionary.

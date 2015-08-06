@@ -1,8 +1,12 @@
-# leave out video files
+# video files
 *.swf
 
-leave out working files
+# working files
 *~
 
-# leave out answer files
+# answer files
 answers_*
+
+# python compiled files
+*.pyc
+Hw_1_tests.pyc
