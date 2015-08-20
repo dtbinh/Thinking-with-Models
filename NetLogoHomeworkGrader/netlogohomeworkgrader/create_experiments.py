@@ -1,11 +1,16 @@
-'''
+'''create_experiments.py
+
+This is a module containing functions which can write an xml file of the
+BehaviorSpace experiments from a chosen NetLogo model for use in checking 
+homework answers.
+
 Created on Aug 17, 2015
 
-@author: Joel
+@author: Joel McCarthy
 '''
 
 from Tkinter import Tk
-from tkFileDialog import askopenfile, asksaveasfile
+from tkFileDialog import askopenfile # , asksaveasfile
 
 # def write_experiment(f, prob_num, repetitions):
 #     f.write('\t<experiment name=\"prob{0}\" repetitions=\"{1}" runMetricsEveryStep=\"true\">')
@@ -50,25 +55,44 @@ def write_experiment_file(nlogo_file, exp_file):
         # Clean up files if they are open.
         if nlogo_file is not None: nlogo_file.close()
         if exp_file is not None: exp_file.close()        
-        
-def main():
-    '''The main method selects files and runs write_experiment_file.
+
+def choose_answer_file():
+    '''Prompts the user to choose an answer nlogo file.
     
-    Tk is used to open a NetLogo file for reading and an xml file for writing
-    and saving. The result of write_experiment_file is printed.
+    Tk is used to open a NetLogo file for reading and the directory of this
+    is used as the location for writing and saving an xml experiment file.
+
+    returns:
+        (file, file): The NetLogo answer file and the xml file to which to 
+            write, both in the same directory.
     '''
     # Hide the root gui.
     Tk().withdraw()
     # Open the netlogo answer file with file explorer.
     nlogo_file = askopenfile(mode='r', 
-            initialdir='C:/Users/Joel/Dropbox/ResearchPhilosophy of Science/' + 
-            'Thinking with Models/Thinking-with-Models/hw1', 
+            initialdir='C:/Users/Joel/Dropbox/Research/' + 
+            'Philosophy of Science/Thinking with Models/Thinking-with-Models/', 
             title='Choose a netlogo file')
     # Open the xml experiment save file with file explorer.
-    exp_file = asksaveasfile(mode='w', 
-            initialdir='C:/Users/Joel/Dropbox/Research/Philosophy of Science/' + 
-            'Thinking with Models/Thinking-with-Models/hw1', 
-            title='Choose a name for an xml file')
+#     exp_file = asksaveasfile(mode='w', 
+#             initialdir='C:/Users/Joel/Dropbox/Research/Philosophy of Science/' + 
+#             'Thinking with Models/Thinking-with-Models/hw1', 
+#             title='Choose a name for an xml file')
+    # Open an file, hw1_experiments.xml for writing in the same directory.
+    exp_file = open(nlogo_file.name[:nlogo_file.name.rfind('/')] + 
+            '/hw1_experiments.xml', 'w')
+    # Return whether the write was successful or not.
+    return (nlogo_file, exp_file)
+        
+def main():
+    '''The main method selects files and runs write_experiment_file.
+    
+    This method calls the choose_answer_file and write_experiment_file methods.
+    The result of write_experiment_file is printed.
+    '''
+    # Let the user choose the answer file.
+    nlogo_file, exp_file = choose_answer_file()
+    # Write the file and print success value.
     print 'Success: '+ str(write_experiment_file(nlogo_file, exp_file))
     
 if __name__ == '__main__':

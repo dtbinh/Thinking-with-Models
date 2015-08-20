@@ -8,6 +8,56 @@ import sys
 import os
 # from create_experiments import write_experiment_file
 
+def get_grading_commands(hw_num, prob_num,
+        main_dir='C:/Users/Joel/Dropbox/Research/Philosophy of Science/' + 
+        'Thinking with Models/Thinking-with-Models/hw1/'):
+    '''This function returns a list of terminal commands for autograding.
+    
+    Args:
+        hw_num (int): The homework number.
+        prob_num (int): The problem number.
+        main_dir (str): The name of the primary directory, which should contain
+            a subdirectory for each student and one for answers. These 
+            subdirectories should contain student and answer NetLogo files.
+            Student csv files will be written into each student's subdirectory
+            and all additional files will be written into the same subdirectory
+            as the answer file.
+    Returns:
+        list: A list of strings, commands which can be run in the terminal or
+            written to a bash or bat script.
+    '''
+    # Assemble the NetLogo command to be run for each student nlogo file. The
+    # command is based on the main_dir, hw_num, and prob_num, and is complete
+    # except for the student id on the --model parameter, since this will be 
+    # different for each student.
+    nlogo_command='java -Xmx1024m -Dfile.encoding=UTF-8 -cp NetLogo.jar ' + \
+        'org.nlogo.headless.Main --model "' + main_dir + 'hw' + hw_num + '_{0}.nlogo" --setup-file "' + main_dir + 'hw' + hw_num + '_experiments.xml" --experiment prob' + prob_num + \
+        ' --table "' + main_dir + 'hw' + hw_num + '_{0}_' + prob_num + '.csv" --threads 1 \n'
+#     print nlogo_command
+    # Open the script file for writing.
+#     script = open(main_dir + 'script.bat', 'w')
+    comm_list = []
+#     hws = [h for h in os.listdir(dirname) ]
+#     write_experiment_file(nlogo_file, exp_file)
+#     print __file__
+    # This may need some alterations to be able to handle unix filesystems. -- \\
+    comm_list.append('python ' + __file__[0:-15].replace('\\', '/') + 
+            'create_experiments.py\n')
+#     print __file__, 'python ' + __file__[0:-15] + 'create_experiments.py\n'
+    # Save the current directory for convenience.
+    comm_list.append('set cur_dir=%cd%\n')
+    comm_list.append('cd C:/Program Files (x86)/NetLogo 5.1.0\n')
+    comm_list.append(nlogo_command.format('answers'))
+    for h in os.listdir(main_dir):
+        if 'hw' + str(hw_num) in h and '.nlogo' in h and 'answers' not in h:
+            student_name = h[4:h.find('.nlogo')]
+#             print nlogo_command.format(student_name)
+            comm_list.append(nlogo_command.format(student_name))
+    comm_list.append('python --version\n')
+    # Reset to the initial current directory for convenience.
+    comm_list.append('cd %cur_dir%')
+    return comm_list
+
 def write_grading_script(hw_num, prob_num,
         main_dir='C:/Users/Joel/Dropbox/Research/Philosophy of Science/' + 
         'Thinking with Models/Thinking-with-Models/hw1/',

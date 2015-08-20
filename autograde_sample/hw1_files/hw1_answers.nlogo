@@ -1000,6 +1000,7 @@ reset-ticks</final>
     <metric>[height] of turtles</metric>
     <metric>[height] of patches</metric>
     <metric>[pen-mode] of turtles</metric>
+    <metric>report6</metric>
     <enumeratedValueSet variable="num-turtles">
       <value value="25"/>
       <value value="50"/>
@@ -1027,6 +1028,7 @@ reset-ticks</final>
     <metric>[pcolor] of patches</metric>
     <metric>[[who] of end1] of links</metric>
     <metric>[[who] of end2] of links</metric>
+    <metric>report7</metric>
     <enumeratedValueSet variable="num-turtles">
       <value value="25"/>
       <value value="50"/>

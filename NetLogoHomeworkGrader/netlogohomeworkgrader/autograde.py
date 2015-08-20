@@ -1,4 +1,4 @@
-'''A wrapper called autograde.py that centralizes functions of the autograder.
+'''autograde.py
 
 This is a wrapper module which can call all outward facing methods from the
 other modules in the autograder package. It can be run either through python

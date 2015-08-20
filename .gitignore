@@ -20,3 +20,8 @@ videos/
 hw1/*.xml
 hw1/*.csv
 hw1/.~lock.*
+
+# Autograde sample folder
+autograde_sample/*.xml
+autograde_sample/*.csv
+autograde_sample/.~lock.*
