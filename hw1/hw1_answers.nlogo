@@ -399,37 +399,36 @@ NIL
 HORIZONTAL
 
 @#$#@#$#@
-## WHAT IS IT?
+# Homework 1
 
-(a general understanding of what the model is trying to show or explain)
-
-## HOW IT WORKS
-
-(what rules the agents use to create the overall behavior of the model)
-
-## HOW TO USE IT
-
-(how to use the model, including a description of each of the items in the Interface tab)
-
-## THINGS TO NOTICE
-
-(suggested things for the user to notice while running the model)
-
-## THINGS TO TRY
-
-(suggested things for the user to try to do (move sliders, switches, etc.) with the model)
-
-## EXTENDING THE MODEL
-
-(suggested things to add or change in the Code tab to make the model more complicated, detailed, accurate, etc.)
-
-## NETLOGO FEATURES
-
-(interesting or unusual features of NetLogo that the model uses, particularly in the Code tab; or where workarounds were needed for missing features)
-
-## RELATED MODELS
-
-(models in the NetLogo Models Library and elsewhere which are of related interest)
+General details about the homework. Don’t forget to use the clear-all, reset-ticks, and tick commands in your setup and go procedures.
+### 1. 
+#### setup1: 
+Spawn a single agent at patch 0 0 with heading 0. (You should be able to do this in 1 line of code. Note the default spawn location.) 
+#### go1: 
+Make the agent advance 10 patches.
+### 2. 
+#### setup2: 
+spawn 1 turtle at each of the following coordinates: (10, 10), (-10, 10), (10, -10), (-10, -10). Set their headings so each one points to patch 0 0. 
+#### go2: 
+this should move each of the four above turtles directly towards the origin (patch 0 0). They should meet exactly at the origin after ten executions of this procedure.
+### 3. 
+#### setup3: 
+spawn 20 turtles with random positions and headings. Set their colors as a blue gradient to scale with their y-coordinates (see scale-color).
+#### go3: 
+change the color of the patch each turtle is on to a shade of yellow in a gradient to scale with the patch's x-coordinate. Move the turtle forward 3.
+### 4. 
+#### setup4: 
+choose num-colored-patches many patches at random and set their color to green. Create num-turtles turtles at random starting locations.
+#### go4: 
+ask all turtles to move forward 1. Then if they are standing on a green patch, they should set a new random decimal heading between 0 and 360 and the patch should change to blue.
+### 5. 
+#### setup5: 
+#### go5: 
+### 6. (Bonus Question) 
+#### setup6: 
+create num-turtles many turtles
+#### go6: 
 
 ## CREDITS AND REFERENCES
 
