@@ -9,4 +9,14 @@ answers_*
 
 # python compiled files
 *.pyc
-Hw_1_tests.pyc
+
+# videos
+videos/
+
+# Dropbox
+.dropbox
+
+# Grading Output files
+hw1/*.xml
+hw1/*.csv
+hw1/.~lock.*
