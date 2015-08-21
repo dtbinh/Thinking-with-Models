@@ -104,6 +104,7 @@ def run_grading_commands(hw_num, prob_num, main_dir, nlogo_dir):
             ' --experiment ' + experiment + \
             ' --table ' + table_path + \
             ' --threads 1 \n'
+            
     # Create the experiment file.
     write_experiment_file(open(main_dir + answer_dir_name + '/hw' +  hw_num + 
             '_answers.nlogo'), open(main_dir + answer_dir_name + '/hw' + 
@@ -186,104 +187,6 @@ def record_grade(grade, student_id, hw_num, prob_num, grade_file_path):
         print sys.exc_info()
         return False
     return True
-    
-# def get_grading_commands(hw_num, prob_num,
-#         main_dir='C:/Users/Joel/Dropbox/Research/Philosophy of Science/' + 
-#         'Thinking with Models/Thinking-with-Models/hw1/'):
-#     '''This function returns a list of terminal commands for autograding.
-#     
-#     Args:
-#         hw_num (int): The homework number.
-#         prob_num (int): The problem number.
-#         main_dir (str): The name of the primary directory, which should contain
-#             a subdirectory for each student and one for answers. These 
-#             subdirectories should contain student and answer NetLogo files.
-#             Student csv files will be written into each student's subdirectory
-#             and all additional files will be written into the same subdirectory
-#             as the answer file.
-#     Returns:
-#         list: A list of strings, commands which can be run in the terminal or
-#             written to a bash or bat script.
-#     '''
-#     # Assemble the NetLogo command to be run for each student nlogo file. The
-#     # command is based on the main_dir, hw_num, and prob_num, and is complete
-#     # except for the student id on the --model parameter, since this will be 
-#     # different for each student.
-#     nlogo_command='java -Xmx1024m -Dfile.encoding=UTF-8 -cp NetLogo.jar ' + \
-#         'org.nlogo.headless.Main --model "' + main_dir + 'hw' + hw_num + '_{0}.nlogo" --setup-file "' + main_dir + 'hw' + hw_num + '_experiments.xml" --experiment prob' + prob_num + \
-#         ' --table "' + main_dir + 'hw' + hw_num + '_{0}_' + prob_num + '.csv" --threads 1 \n'
-#     # The list of commands.
-#     comm_list = []
-#     # Call the create_experiments module.
-#     comm_list.append('python ' + __file__[0:-15].replace('\\', '/') + 
-#             'create_experiments.py\n')
-#     # 1 will instruct to save the current directory for convenience.
-#     comm_list.append(1)
-#     comm_list.append('cd C:/Program Files (x86)/NetLogo 5.1.0\n')
-#     comm_list.append(nlogo_command.format('answers'))
-#     for h in os.listdir(main_dir):
-#         if 'hw' + str(hw_num) in h and '.nlogo' in h and 'answers' not in h:
-#             student_name = h[4:h.find('.nlogo')]
-# #             print nlogo_command.format(student_name)
-#             comm_list.append(nlogo_command.format(student_name))
-#     comm_list.append('python --version\n')
-#     # Reset to the initial current directory for convenience.
-#     comm_list.append('cd %cur_dir%')
-#     return comm_list
-# 
-# def write_grading_script(hw_num, prob_num,
-#         main_dir='C:/Users/Joel/Dropbox/Research/Philosophy of Science/' + 
-#         'Thinking with Models/Thinking-with-Models/hw1/',
-#         nlogo_command='java -Xmx1024m -Dfile.encoding=UTF-8 -cp NetLogo.jar ' +
-#         'org.nlogo.headless.Main --model "C:/Users/Joel/Dropbox/Research/' +
-#         'Philosophy of Science/Thinking with Models/Thinking-with-Models/' +
-#         'hw1/hw_1_joelm.nlogo" --setup-file "C:/Users/Joel/Dropbox/' +
-#         'Research/Philosophy of Science/Thinking with Models/' +
-#         'Thinking-with-Models/hw1/hw_1_grader.xml" --experiment step1 ' +
-#         '--table "C:/Users/Joel/Dropbox/Research/Philosophy of Science/' +
-#         'Thinking with Models/Thinking-with-Models/hw1/'):
-#     '''
-#     
-#     Args:
-#         hw_num (int): The homework number.
-#         prob_num (int): The problem number.
-#         main_dir (str): The name of the primary directory, which should contain
-#             student and answer nlogo files, and to which the script and csv
-#             files will be written.
-#     Returns:
-#         bool: True if successful, False otherwise.
-#     '''
-#     # Assemble the NetLogo command to be run for each student nlogo file. The
-#     # command is based on the main_dir, hw_num, and prob_num, and is complete
-#     # except for the student pennkey on the --model parameter, since this will
-#     # be different for each student.
-#     nlogo_command='java -Xmx1024m -Dfile.encoding=UTF-8 -cp NetLogo.jar ' + \
-#         'org.nlogo.headless.Main --model "' + main_dir + 'hw' + hw_num + '_{0}.nlogo" --setup-file "' + main_dir + 'hw' + hw_num + '_experiments.xml" --experiment prob' + prob_num + \
-#         ' --table "' + main_dir + 'hw' + hw_num + '_{0}_' + prob_num + '.csv"\n'
-# #     print nlogo_command
-#     # Open the script file for writing.
-#     script = open(main_dir + 'script.bat', 'w')
-# #     hws = [h for h in os.listdir(dirname) ]
-# #     write_experiment_file(nlogo_file, exp_file)
-# #     print __file__
-#     # This may need some alterations to be able to handle unix filesystems. -- \\
-#     script.write('python ' + __file__[0:-15].replace('\\', '/') + 
-#             'create_experiments.py\n')
-# #     print __file__, 'python ' + __file__[0:-15] + 'create_experiments.py\n'
-#     # Save the current directory for convenience.
-#     script.write('set cur_dir=%cd%\n')
-#     script.write('cd C:/Program Files (x86)/NetLogo 5.1.0\n')
-#     script.write(nlogo_command.format('answers'))
-#     for h in os.listdir(main_dir):
-#         if 'hw' + str(hw_num) in h and '.nlogo' in h and 'answers' not in h:
-#             student_name = h[4:h.find('.nlogo')]
-# #             print nlogo_command.format(student_name)
-#             script.write(nlogo_command.format(student_name))
-#     script.write('python --version\n')
-#     # Reset to the initial current directory for convenience.
-#     script.write('cd %cur_dir%')
-#     script.close()
-#     return True
 
 def main(argv):
     '''The main method runs the run_grading_commands function.
@@ -296,13 +199,7 @@ def main(argv):
             See module docstring or type 'python autograde.py -h' for 
             documentation on which flags are valid.
     '''
-# #     write_grading_script(argv[0], argv[1])
-#     run_grading_commands(argv[0], argv[1], 
-#         main_dir='/home/joel/Dropbox/Research/Philosophy of Science/' + 
-#         'Thinking with Models/Thinking-with-Models/autograde_sample/', 
-#         nlogo_dir='/opt/NetLogo/netlogo-5.0.5')
-# #     print int(argv[0]), int(argv[1])
-    # Initialize values for function call
+    # Preset some variables for the function.
     hw_num, prob_num, main_dir, netlogo_dir = -1, -1, -1, -1
     # Get the terminal flags from argv.
     try:
@@ -312,7 +209,7 @@ def main(argv):
     except: 
         print(__doc__)
         sys.exit(2)
-#     print opts
+    # Set variables according to flags (see module __doc__ string for details.
     for opt, arg in opts:
         if opt in ('-h', '--help'):
             print(__doc__)
@@ -325,12 +222,14 @@ def main(argv):
             main_dir = arg
         elif opt in ('-d', '--netlogo_dir'):
             netlogo_dir = arg
+    # No extra arguments
     for arg in args:
         pass
+    # Must set homework and problem numbers. If not, fail and print help.
     if hw_num == -1 or prob_num == -1:
-#         print hw_num, prob_num, main_dir, netlogo_dir
         print "Please use all required flags.\n"
         print(__doc__)
+    # If correct, run the autograde function.
     else:
         return run_grading_commands(hw_num, prob_num, main_dir, netlogo_dir)
 

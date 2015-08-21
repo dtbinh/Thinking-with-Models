@@ -53,7 +53,6 @@ def grade_problem(ans_path, stud_path):
         print sys.exc_info()
         return 0
 
-# Will probably want to add some relative error tolerance in here, ie. let 1000000001 == 1000000000
 def vals_equal(ans_val, stud_val):
     '''This checks if two values are within tolerance of each other.
     
@@ -100,8 +99,17 @@ def vals_equal(ans_val, stud_val):
 def get_problem_grade(grade_table):
     '''Returns a grade out of ten, given a grade_table
     
+    This method returns a 0 if the file did not run at all, and a 3 or above if
+    it did run. The remaining 7 points are added in direct proportion to the
+    percentage of correct values in the problem.
+    
+    Note: This grading system will likely need significant fine-tuning in the
+    future (ie. weight parts of the problem differently, nonlinear
+    relationship, etc.).
+    
     args:
-        
+        grade_table (list): A two dimensional list of booleans. The output of
+            grade_problem.
     returns:
         int: A grade between 0 and 10 (inclusive).
     '''
@@ -119,23 +127,3 @@ def get_problem_grade(grade_table):
                 total_num += 1
     percent_correct = num_correct/total_num
     return round(3 + (percent_correct * 7), 1)
-# def main(argv):
-#     '''
-#      
-#     '''
-# #     Tk().withdraw()
-# #     dirname = askdirectory(
-# #             initialdir='C:/Users/Joel/Dropbox/Research/' +
-# #             'Philosophy of Science/Thinking with Models/' +
-# #             'Thinking-with-Models/hw1', 
-# #             title='Choose a directory containing homework and answer files.')
-# # #     dirname = 'C:/Users/Joel/Dropbox/Research/Philosophy of Science/' + \
-# # #             'Thinking with Models/Thinking-with-Models/hw1'
-# #     print dirname
-# #     print grade_problem(dirname, 1, 1)
-#     print get_problem_grade(grade_problem('/home/joel/Dropbox/Research/Philosophy of Science/Thinking with Models/Thinking-with-Models/autograde_sample/hw1_files/hw1_answers_1.csv', 
-#             '/home/joel/Dropbox/Research/Philosophy of Science/Thinking with Models/Thinking-with-Models/autograde_sample/1/hw1_1.csv'))
-#  
-# if __name__ == '__main__':
-#     # Calls the main method if run as main.
-#     main(sys.argv[1:])
