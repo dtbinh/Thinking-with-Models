@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE experiments SYSTEM "behaviorspace.dtd">
+<experiments>
+  <experiment name="prob1" repetitions="1" runMetricsEveryStep="true">
+    <setup>random-seed 17638974
+setup1</setup>
+    <go>go1</go>
+    <final>ca
+reset-ticks</final>
+    <timeLimit steps="100"/>
+    <metric>count turtles</metric>
+    <metric>[xcor] of turtles</metric>
+    <metric>[ycor] of turtles</metric>
+    <enumeratedValueSet variable="num-turtles">
+      <value value="10"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="num-links">
+      <value value="50"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="num-colored-patches">
+      <value value="300"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="prob2" repetitions="1" runMetricsEveryStep="true">
+    <setup>random-seed 17638974
+setup2</setup>
+    <go>go2</go>
+    <final>ca
+reset-ticks</final>
+    <timeLimit steps="100"/>
+    <metric>count turtles</metric>
+    <metric>[xcor] of turtles</metric>
+    <metric>[ycor] of turtles</metric>
+    <enumeratedValueSet variable="num-turtles">
+      <value value="10"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="num-links">
+      <value value="50"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="num-colored-patches">
+      <value value="300"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="prob3" repetitions="1" runMetricsEveryStep="true">
+    <setup>random-seed 17638974
+setup3</setup>
+    <go>go3</go>
+    <final>ca
+reset-ticks</final>
+    <timeLimit steps="200"/>
+    <metric>count turtles</metric>
+    <metric>[xcor] of turtles</metric>
+    <metric>[ycor] of turtles</metric>
+    <metric>[color] of turtles</metric>
+    <metric>[pcolor] of patches</metric>
+    <enumeratedValueSet variable="num-turtles">
+      <value value="25"/>
+      <value value="50"/>
+      <value value="75"/>
+      <value value="100"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="num-links">
+      <value value="50"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="num-colored-patches">
+      <value value="300"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="prob4" repetitions="1" runMetricsEveryStep="true">
+    <setup>random-seed 17638974
+setup4</setup>
+    <go>go4</go>
+    <final>ca
+reset-ticks</final>
+    <timeLimit steps="200"/>
+    <metric>count turtles</metric>
+    <metric>[xcor] of turtles</metric>
+    <metric>[ycor] of turtles</metric>
+    <metric>[color] of turtles</metric>
+    <metric>[pcolor] of patches</metric>
+    <enumeratedValueSet variable="num-turtles">
+      <value value="25"/>
+      <value value="50"/>
+      <value value="75"/>
+      <value value="100"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="num-links">
+      <value value="50"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="num-colored-patches">
+      <value value="300"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="prob5" repetitions="1" runMetricsEveryStep="true">
+    <setup>random-seed 17638974
+setup5</setup>
+    <go>go5</go>
+    <final>ca
+reset-ticks</final>
+    <timeLimit steps="200"/>
+    <metric>count turtles</metric>
+    <metric>[xcor] of turtles</metric>
+    <metric>[ycor] of turtles</metric>
+    <metric>[color] of turtles</metric>
+    <metric>[pcolor] of patches</metric>
+    <metric>[counter-limit] of turtles</metric>
+    <enumeratedValueSet variable="num-turtles">
+      <value value="25"/>
+      <value value="50"/>
+      <value value="75"/>
+      <value value="100"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="num-links">
+      <value value="50"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="num-colored-patches">
+      <value value="300"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="prob6" repetitions="1" runMetricsEveryStep="true">
+    <setup>random-seed 17638974
+setup6</setup>
+    <go>go6</go>
+    <final>ca
+reset-ticks</final>
+    <timeLimit steps="200"/>
+    <metric>count turtles</metric>
+    <metric>[xcor] of turtles</metric>
+    <metric>[ycor] of turtles</metric>
+    <metric>[color] of turtles</metric>
+    <metric>[pcolor] of patches</metric>
+    <metric>[height] of turtles</metric>
+    <metric>[height] of patches</metric>
+    <metric>[pen-mode] of turtles</metric>
+    <metric>report6</metric>
+    <enumeratedValueSet variable="num-turtles">
+      <value value="25"/>
+      <value value="50"/>
+      <value value="75"/>
+      <value value="100"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="num-links">
+      <value value="50"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="num-colored-patches">
+      <value value="300"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="prob7" repetitions="1" runMetricsEveryStep="true">
+    <setup>random-seed 17638974
+setup7</setup>
+    <go>go7</go>
+    <final>ca
+reset-ticks</final>
+    <timeLimit steps="200"/>
+    <metric>count turtles</metric>
+    <metric>[xcor] of turtles</metric>
+    <metric>[ycor] of turtles</metric>
+    <metric>[color] of turtles</metric>
+    <metric>[pcolor] of patches</metric>
+    <metric>[[who] of end1] of links</metric>
+    <metric>[[who] of end2] of links</metric>
+    <metric>report7</metric>
+    <enumeratedValueSet variable="num-turtles">
+      <value value="25"/>
+      <value value="50"/>
+      <value value="75"/>
+      <value value="100"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="num-links">
+      <value value="50"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="num-colored-patches">
+      <value value="300"/>
+    </enumeratedValueSet>
+  </experiment>
+</experiments>

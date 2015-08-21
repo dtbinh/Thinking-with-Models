@@ -410,6 +410,8 @@ report6
 # Homework 1
 
 Homework 1 includes exercises in basic turtle, patch, and link commands. Before beginning it, you should have completed all three tutorials in the NetLogo documentation online. Fill in the given procedures as instructed below. When given go procedure instructions, be sure to code the procedure to execute in exactly the order instructed. You may create as many additional procedures and variables as you desire, but please do not alter the names of the original procedures and variables in this file, or the autograder will be unable to grade your homework correctly. Don’t forget to use the clear-all, reset-ticks, and tick commands in your setup and go procedures.
+
+####Important note: Please save and upload your file as hw1_[pennkey].nlogo.
 ### 1. Move a turtle
 #### setup1: 
 Spawn a single agent at patch 0 0 with heading 0. (You should be able to do this in 1 line of code. Note the default spawn location.)
