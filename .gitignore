@@ -23,3 +23,5 @@ hw1/.~lock.*
 
 # Autograde sample folder
 autograde_sample/.~lock.*
+autograde_sample/*.csv
+autograde_sample/*/*.csv

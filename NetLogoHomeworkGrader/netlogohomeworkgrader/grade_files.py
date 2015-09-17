@@ -12,6 +12,8 @@ import sys
 import csv
 import ast
 
+grading_scale = [0, 3, 10]
+
 def grade_problem(ans_path, stud_path):
     '''Grades a single csv file against the given answer file.
     
@@ -125,5 +127,7 @@ def get_problem_grade(grade_table):
             else:
                 num_correct += cell
                 total_num += 1
-    percent_correct = num_correct/total_num
-    return round(3 + (percent_correct * 7), 1)
+    if total_num == 0: return 0
+    elif total_num == num_correct: return 10
+    else: return 3
+#     else: return round(3 + ((num_correct/(float)(total_num)) * 7), 1)

@@ -10,15 +10,18 @@ Created on Aug 18, 2015
 @author: Joel McCarthy
 
 command line sytax:
-    python autograde.py [-h] -n hw_number -p prob_number 
+    autograde.py [-h] -n hw_number -p prob_number 
         [-m main_directory] [-d netlogo_directory]
     
 args:
     -h, --help: Prints the help documentation for this script.
     -n hw_number, --hw_number hw_number: The number of the homework to be 
         graded.
-    -p problem_number --prob_number problem_number: The number of the problem
-        to be graded.
+    -p "problem_number1 problem_number2 ..." 
+        --prob_numbers "problem_number1 problem_number2 ...": The numbers of 
+        the problems to be graded. Can take of the form of a list of space-
+        separated integers, as shown above, or a single integer with no quotes,
+        for one problem (eg. -p 1).
     -m main_directory --main_dir main_directory: The main directory. Must 
         contain student folders with nlogo files, as well as an answer folder.
         with an answer nlogo file. Leaving this blank will cause a dialog box
@@ -27,6 +30,21 @@ args:
         directory. Must contain NetLogo.jar, as well as the /lib directory.
         Leaving this blank will cause a dialog box to open in which you may 
         select your desired directory.
+    -g --grade_only: Does not produce xml or csv files for grading. Instead,
+        looks for pre-existing files and grades them.
+        
+example command:
+    python autograde.py -n 1 -p "1 2 3" \
+            -m "/home/joel/Dropbox/Research/Philosophy of Science/\
+            Thinking with Models/Thinking-with-Models/autograde_sample/" \
+            -d "/opt/NetLogo/netlogo-5.0.5"
+            
+        This command will execute the autograde.py script, grading homework 1,
+        problems 1, 2, and 3 for all student folders which it finds in the
+        directory after -m. It will expect to find the NetLogo.jar file in the
+        directory after -d. (Please note, this cannot be directly copied into
+        the terminal. Will require some spaces to be deleted before it is
+        properly runnable.)
 '''
 
 import sys
@@ -35,10 +53,42 @@ import os
 import csv
 from Tkinter import Tk
 from tkFileDialog import askdirectory
-from netlogohomeworkgrader.get_experiments import write_experiment_file
-from netlogohomeworkgrader.grade_files import grade_problem, get_problem_grade
+from get_experiments import write_experiment_file
+from grade_files import grade_problem, get_problem_grade
 
-def run_grading_commands(hw_num, prob_num, main_dir, nlogo_dir):
+def run_multiple_grading_commands(hw_num, prob_nums, main_dir, nlogo_dir, 
+        grade_only):
+    '''This function runs run_grading_commands on multiple problems at once.
+    
+    This is a wrapper function which enables grading multiple problems at once
+    from a list of (hopefully valid) problems. There is no support for invalid
+    problems. If the user gives one (ie. 11 on a 10 problem set), the function
+    will break in the ordinary way, either failing to find an experiment in an
+    nlogo file, or failing to find a csv file. The arguments are exactly the
+    same as those of run_grading_commands, except for prob_nums, so see its
+    docstring for more details.
+    
+    args:
+        hw_num (int): The homework number.
+        prob_nums (int): A list of problem numbers to be graded.
+        main_dir (str): The name of the primary directory.
+        nlogo_dir (str): The name of the directory containing the NetLogo.jar
+            file and /lib subdirectory.
+        grade_only (bool): If True, the function does not produce any new 
+            files.
+    returns:
+        list: A list of boolean success values, returned from 
+            run_grading_commands for each problem.
+    '''
+    # Run the grading commands for each problem in the list and record success.
+    succ_list = []
+    for prob_num in prob_nums:
+        succ_list.append(run_grading_commands(hw_num, prob_num, main_dir, 
+                nlogo_dir, grade_only))
+    # Return success values.
+    return succ_list
+
+def run_grading_commands(hw_num, prob_num, main_dir, nlogo_dir, grade_only):
     '''This function runs all commands for grading a particular problem.
     
     Where applicable, commands are run through direct calls to python
@@ -57,6 +107,10 @@ def run_grading_commands(hw_num, prob_num, main_dir, nlogo_dir):
             as the answer file.
         nlogo_dir (str): The name of the directory containing the NetLogo.jar
             file and /lib subdirectory.
+        grade_only (bool): If True, the function does not run java commands to
+            produce the experiment xml file or the data csv files from each 
+            nlogo file. Instead, it assumes they already exist, and just grades 
+            them.
     Returns:
         list: True if successful, False otherwise.
     '''
@@ -105,28 +159,33 @@ def run_grading_commands(hw_num, prob_num, main_dir, nlogo_dir):
             ' --table ' + table_path + \
             ' --threads 1 \n'
             
-    # Create the experiment file.
-    write_experiment_file(open(main_dir + answer_dir_name + '/hw' +  hw_num + 
-            '_answers.nlogo'), open(main_dir + answer_dir_name + '/hw' + 
-            hw_num + '_experiments.xml', 'w'))
-    # Change to the directory containing NetLogo.jar.
-    os.chdir(nlogo_dir)
-    # Call system to create the csv answer file and then get its path.
-    os.system(nlogo_command.format(answer_dir_name, 'answers'))
+    # If creating files, create the experiment file.
+    if not grade_only:
+        write_experiment_file(
+                open(main_dir + answer_dir_name + 
+                '/hw' + hw_num + '_answers.nlogo'), 
+                open(main_dir + answer_dir_name + 
+                '/hw' + hw_num + '_experiments.xml', 'w'))
+    # If creating files, Change to directory containing NetLogo.jar and call
+    # system to produce csv answer file. Get path of answer file.
+    if not grade_only:
+        os.chdir(nlogo_dir)
+        os.system(nlogo_command.format(answer_dir_name, 'answers'))
     ans_path = main_dir + answer_dir_name + data_file_name
     # Grade student nlogo files.
     for h in os.listdir(main_dir):
         # Student subdirectories are identified as those directories which have
         # only digits in their names.
         if os.path.isdir(main_dir + h) and h.isdigit():
-            # Create student csv files from nlogo files.
-            os.system(nlogo_command.format(h, h))
+            # If creating files, create student csv files from nlogo files.
+            if not grade_only:
+                os.system(nlogo_command.format(h, h))
             # Grade csv files against answer file and record grades.
             stud_path = main_dir + h + data_file_name
             record_grade(get_problem_grade(grade_problem(ans_path, stud_path)),
                     h, hw_num, prob_num, 
-                    main_dir + answer_dir_name + '/grades.csv')
-    os.system('echo "Graded"')
+                    main_dir + '/grades.csv')
+    os.system('echo "Graded ' + hw_num + '.' + prob_num + '"')
     return True
 
 def record_grade(grade, student_id, hw_num, prob_num, grade_file_path):
@@ -200,28 +259,41 @@ def main(argv):
             documentation on which flags are valid.
     '''
     # Preset some variables for the function.
-    hw_num, prob_num, main_dir, netlogo_dir = -1, -1, -1, -1
+    hw_num, prob_num, main_dir, netlogo_dir, grade_only = -1, -1, -1, -1, False
     # Get the terminal flags from argv.
     try:
-        opts, args =  getopt.getopt(argv, 'hn:p:d:m:', ['help', 'hw_number=', 
-                'prob_number=', 'main_dir=', 'netlogo_dir='])
+        opts, args =  getopt.getopt(argv, 'hn:p:d:m:g', ['help', 'hw_number=', 
+                'prob_numbers=', 'main_dir=', 'netlogo_dir=', 'grade_only'])
     # If error, print the docstring for this script.
     except: 
+        print('Problem with command flags. Please see documentation and ' + \
+                'correct.\n')
         print(__doc__)
         sys.exit(2)
-    # Set variables according to flags (see module __doc__ string for details.
+    # Set variables according to flags (see module __doc__ string or type
+    # "python autograde.py -h" into terminal for details).
     for opt, arg in opts:
         if opt in ('-h', '--help'):
             print(__doc__)
             sys.exit()
         elif opt in ('-n', '--hw_number'):
             hw_num = arg
-        elif opt in ('-p', '--prob_number'):
-            prob_num = arg
+        elif opt in ('-p', '--prob_numbers'):
+            # Get problem arguments out of string and check all are numbers.
+            arg = arg.split()
+            if all([p.isdigit() for p in arg]):
+                prob_num = arg
+            # If not, print error message.
+            else: 
+                print 'All -p or --prob_numbers arguments must be numbers\n'
+                print(__doc__)
+                sys.exit(2)
         elif opt in ('-m', '--main_dir'):
             main_dir = arg
         elif opt in ('-d', '--netlogo_dir'):
             netlogo_dir = arg
+        elif opt in ('-g', '--grade_only'):
+            grade_only = True
     # No extra arguments
     for arg in args:
         pass
@@ -231,7 +303,8 @@ def main(argv):
         print(__doc__)
     # If correct, run the autograde function.
     else:
-        return run_grading_commands(hw_num, prob_num, main_dir, netlogo_dir)
+        return run_multiple_grading_commands(hw_num, prob_num, main_dir, 
+                netlogo_dir, grade_only)
 
 if __name__ == '__main__':
     # Runs the main method if run as main.

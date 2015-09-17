@@ -15,39 +15,10 @@ to setup1
 end
 
 to go1
-  ask turtles [fd 10]
+  ask turtles [fd 9]
   tick
 end
 
-to setup2
-  ca
-  crt 1
-  [
-    setxy 10 10
-    set heading towards patch 0 0
-  ]
-  crt 1
-  [
-    setxy -10 10
-    set heading towards patch 0 0
-  ]
-  crt 1
-  [
-    setxy 10 -10
-    set heading towards patch 0 0
-  ]
-  crt 1
-  [
-    setxy -10 -10
-    set heading towards patch 0 0
-  ]
-  reset-ticks
-end
-
-to go2
-  ask turtles [fd sqrt(100 + 100) / 10]
-  tick
-end
 
 to setup3
   ca
@@ -62,7 +33,7 @@ end
 to go3
   ask turtles
   [
-    ask patch-here [set pcolor scale-color yellow pxcor min-pxcor max-pxcor]
+    ask patch-here [set pcolor scale-color green pxcor min-pxcor max-pxcor]
     fd 3
   ]
   tick

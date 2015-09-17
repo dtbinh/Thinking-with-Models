@@ -1,0 +1,231 @@
+PHIL 203/OPIM 325 2014C Thinking With Models
+Jump to Today
+OPIM 325 and PHIL 203: Thinking with Models
+
+Fall, 2014
+
+Office hours:
+
+Kimbrough Wednesdays  9–12 and by appointment, 565 JMHH
+
+Weisberg, Wednesday 2-3:30 and by appointment, 421 Cohen Hall
+
+Required Text
+
+Agent-based and Individual-Based Modeling, Railsback and Grimm (available at the Penn Book
+
+Center)
+
+Various other readings will be assigned and will be made available on Canvas.
+
+ 
+
+Grading will be based on several components, roughly as follows:
+
+25% Class participation and in-class exercises.
+
+25% Homework assignments.
+
+50% Final project.
+
+ 
+
+Class Schedule
+
+8/28 Introduction: What is Modeling
+
+Reading: Weisberg, Simulation and Similarity chapters 1 and 2Preview the documentView in a new window (on Canvas)
+
+ 
+
+9/2 Models and Modeling
+
+Reading: Weisberg, chapter 3Preview the documentView in a new window (on Canvas), R&G chapter 1
+
+ 
+
+9/4 Asking questions with models
+
+Reading: Netlogo tutorials 1 and 2 (in the Netlogo Users Manual (Links to an external site.))
+
+ 
+
+9/9 Building a simple Netlogo model
+
+Reading: R&G Chapter 2. Assignment (due before next class): Choose two modifications in exercise #4, p. 33. Make two new NetLogo models with these changes. Read "IntroductionPreview the documentView in a new window" (especially on the Converse formula). SlidesPreview the documentView in a new window. Butterfly RandG NetLogo modelView in a new window. Converse NetLogo modelView in a new window.  Huff NetLogo modelView in a new window. Huff Turtle-Based NetLogo modelView in a new window.
+
+ 
+
+ 
+
+9/11 A deeper look at Netlogo
+
+Reading: Schelling’s model of segregation (Canvas)Preview the documentView in a new window. Example: Segregation.nlogo and Flocking.nlogo in the NetLogo models library. Optional Schelling reading (longer paper)Preview the documentView in a new window.
+
+ 
+
+9/16 Using BehaviorSpace
+
+Reading: R & G, 102–108.
+
+Assignment (before next class): Find the tipping points in the Netlogo segregation model.
+
+How do they change with changing population size?
+
+ 
+
+9/18 ODD Protocol and Variables in Models
+
+Reading: R&G chapter 3 Assignment: Exercise #3 on p.45
+
+ 
+
+9/23 Implementing an Agent-Based Model from scratch
+
+Reading: R&G chapter 4; instructor handout on pseudocode and other program design and development concepts.
+
+Assignment: exercises 1–3 on p. 59.
+
+ 
+
+9/25 Rosh Hashanah. No class.
+
+ 
+
+9/30 Improving & Analyzing the Butterfly model
+
+Reading: R&G chapter 5
+
+Assignment: exercises 6 and 7, chapter 5
+
+Bonus assignment: exercise 8
+
+ 
+
+10/2 Traditional Programming, Debugging, and Testing Practices
+
+Reading: R&G chapter 6.
+
+Conventional Programming 1 NetLogo model from http://modelingcommons.org. Lecture and in-class exercisesView in a new window.
+
+ 
+
+10/7 Traditional Programming, Debugging, and Testing Practices
+
+Reading: “Making Predictions: Group Decision Prediction (GDP) Problems”Preview the documentView in a new window by SK, on Canvas.
+
+IranBargaining NetLogo model from http://modelingcommons.org.
+
+Homework assignment given out. Here are the slides we used today; they contain the assignment, both in-class and to turn in later: slidesPreview the documentView in a new window.
+
+ 
+
+* * * Fall Break Thursday–Sunday October 9–12, 2014. ***
+
+ 
+
+10/14 Emergence
+
+Reading: R&G ch. 8. Slides for todayPreview the documentView in a new window.
+
+ 
+
+10/16 “Observing” agent behavior
+
+Reading: R&G ch. 9 assignment: #3 on p. 114, #1, 3, 4 on p/125
+
+ 
+
+10/21 Sensing
+
+Reading: chapter 10 of R&G. Today's slide deckPreview the documentView in a new window. NetLogo NotesView in a new window.  Scheduled but not done; deferred to next time: R&G NetLogo Model 10.4.1View in a new window. R&G NetLogo Model 10.4.3View in a new window.
+
+Reading for next time: Introduction to COModelsPreview the documentView in a new window. Read this for general understanding only. Optional reading (NOT required): Exploratory ModelingPreview the documentView in a new window by Steve Bankes This isn't about constrained optimization, but it is very relevant to thinking with models.
+
+Answers for today's in-class assignmentView in a new window.
+
+ 
+
+10/23 Constrained Optimization
+
+ 
+
+From last time, structured walk throughs for  R&G NetLogo Model 10.4.1View in a new window and  R&G NetLogo Model 10.4.3View in a new window.
+
+Reading: “Constrained Optimization Models: Introduction and Concepts”Preview the documentView in a new window by SK, on Canvas. Slides for classPreview the documentView in a new window.
+
+ 
+
+10/28 Linear Programming
+
+Finish up from last time: Code walk through for R&G chapter 10.
+
+Start COModeling Intro:  Slides for classPreview the documentView in a new window.
+
+ 
+
+10/30/2014 Constrained Optimization Other Than Linear Programing: Local search methods
+
+Finish up from last time:  COModeling Intro:  Slides for classPreview the documentView in a new window.
+
+Discuss Iran bargaining essays, now graded.
+
+Linear programming slidesPreview the documentView in a new window, focusing on post-solution analysis.
+
+ 
+
+11/4 Constrained Optimization Other Than Linear Programming: Population based methods
+
+ 
+
+Linear programming slidesPreview the documentView in a new window, focusing on post-solution analysis.
+
+Strongly recommended: Khan Academy: "A Firms's Marginal Product Revenue Curve" (Links to an external site.). (13:02 minutes)
+
+Recommended: "A Note on the Deliberation Problem for Constrained Optimization and How Evolutionary Computation May Contribute to Its Solution" (Links to an external site.) by Steven Orla Kimbrough and David Harlan Wood (CIST, 2008).
+
+Recommended "Simple Knapsack Problems"Preview the documentView in a new window.
+
+ 
+
+ 
+
+11/6 Adaptive Behavior reading: chapter 11
+
+ 
+
+Slides: "Beyond Linear Programming"Preview the documentView in a new window,
+
+ "On Objectives and Rationality"Preview the documentView in a new window (starting chapter 11).
+
+11/11 Interaction among Agents reading: chapter 13
+
+assignment: p. 182 #2, 3 (group work)
+
+ 
+
+11/13 Complex Agent Based Models
+
+Reading: chapter 18
+
+ 
+
+11/18 Catch up and how to plan your own model
+
+ 
+
+11/20 Develop model in class with help from classmates and professors.
+
+ ODD Template.nlogoView in a new window This NetLogo file contains information only in the Info tab. Copy the ODD template and paste it into your model's Info tab, then fill in the blanks.
+
+11/25 Develop model in class with help from classmates and professors.
+
+ 
+
+12/2 Develop model in class with help from classmates and professors.
+
+ 
+
+12/4 Presentations andWrap-up discussion.
+
+12/9 Presentations andWrap-up discussion.
