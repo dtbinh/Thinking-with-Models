@@ -25,3 +25,6 @@ hw1/.~lock.*
 autograde_sample/.~lock.*
 autograde_sample/*.csv
 autograde_sample/*/*.csv
+
+# archive
+/archive/
