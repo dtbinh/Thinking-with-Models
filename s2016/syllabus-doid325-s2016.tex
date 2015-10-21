@@ -1,0 +1,254 @@
+% See my Daybook, pages 40--2, 7/18/07
+\def\year{2016}
+ \def\lastclass{**Wednesday, April 29, \year}
+\def\noop#1{}
+\def\place{\bf ***TBA***}
+\def\canvas{\bf ***TBA***}
+\def\mb{{\it DAMbook}}
+\def\mlb{MATLAB}
+\def\prf{{\it PRFbook}}
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
+%\geometry{landscape}                % Activate for for rotated page geometry
+%\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{palatino} %{times}
+\usepackage{color}
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+
+\newcount\instructor
+
+\instructor=1
+
+\title{{\color{red} DRAFT:} Syllabus, Spring \year , for OIDD 325:  \\
+Thinking with Models \\
+		   3:00--4:20 M \&\ W, \place \\
+		   Canvas: \canvas  %\url{https://wharton.instructure.com/courses/1220877}
+		   }
+\author{Professor Steven O. Kimbrough, Instructor  \\
+Office hours: 565 JMHH, 9:30--11:00  and 1:30--3:00 Wednesdays, and by appointment}
+%\date{April 28, 2014, revision 2}                                           % Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+%\section{}
+%\subsection{}
+
+%\url{http://www.youtube.com/watch?v=ZK3O402wf1c} Gilbert Strang on linear algebra.
+
+\section{Class Description}
+
+\section{Texts and Software}
+
+%\cite{chou_kimbrough_cmot_2016}
+
+\begin{itemize}
+\item NetLogo. Free download from \url{http://ccl.northwestern.edu/netlogo/}.
+
+
+
+\item  {\it NetLogo User Manual} (comes with NetLogo)
+
+\item {\it An Introduction to Agent-Based Modeling}
+\citep{wilensky_rand_2015}.
+
+\item Other readings and handouts to include:
+\begin{enumerate}
+\item \citet{bankes_1993}
+\item \citet{bankes_lempert_popper_2002}
+\item \citet[chapters 1 and 2]{weisberg_2013}
+\item See readings from fall 2014.
+\end{enumerate}
+\end{itemize}
+\section{Grades}
+
+
+
+\section{Class Schedule}
+
+\begin{enumerate}
+\item  Introduction and overview of the course. 
+
+Reading (before class): \citep[chapter 0]{wilensky_rand_2015}, ``Why
+Agent-Based Modeling.''
+
+\ifnum\instructor=1
+{\bf *** Instructor Notes: Overview of the class. SAIL philosophy. Initial discussion of what modeling is
+  about and the three distinctions: parametric versus strategic,
+  insight versus decision, and description versus exploration. We are
+  largely:
+parametric,  insight, exploration. NetLogo: about,
+examples. Installing NetLogo. Note that we will focus on programming
+NetLogo at the start, then move on to other matters to do with
+modeling once you have this under your belts.
+What next. Should we do the initial exercises? Probably reserve that
+for next time. ***}
+\fi
+
+\item Getting started with ABM.
+
+Reading (before class): \citep[chapter 1]{wilensky_rand_2015}, ``Why
+Agent-Based Modeling'' and from the {\it NetLogo User Manual}
+\begin{itemize}
+\item Learning NetLogo
+\begin{itemize}
+\item   Tutorial \#1: Models
+ %\item  Tutorial \#2: Commands
+% \item  Tutorial \#3: Procedures 
+\end{itemize}
+\end{itemize}
+
+\ifnum\instructor=1
+{\bf *** Instructor Notes: We want to make this a prototypical class,
+  I think. Begin with Q\&A and perhaps a 20 minute lecture/overview of
+the material for the day. Then onto SAILing. Perhaps both some NetLogo
+exercises (the first, very simple ones) and also some small group
+exercises, to be written down and handed in? Roughly: 20 minutes
+lecture, 30 minutes NetLogo exercises, 30 minutes small group
+exercises? ***}
+\fi
+\item Simple ABMs: Life.
+
+Reading (before class): \citep[chapter 2, pages 45--68]{wilensky_rand_2015},
+``Creating Simple Agent-Based Models'' and from the {\it NetLogo User Manual}
+\begin{itemize}
+\item Learning NetLogo
+\begin{itemize}
+%\item   Tutorial \#1: Models
+ \item  Tutorial \#2: Commands
+ \item  Tutorial \#3: Procedures 
+\end{itemize}
+\end{itemize}
+
+\item Simple ABMs: Heros and Cowards.
+
+Reading (before class): \citep[chapter 2, pages 68--87]{wilensky_rand_2015},
+``Creating Simple Agent-Based Models''.
+
+\item Simple ABMs: Simple Economy.
+
+Reading (before class): \citep[chapter 2, pages 87--99]{wilensky_rand_2015},
+``Creating Simple Agent-Based Models''.
+
+\ifnum\instructor=1
+{\bf *** Instructor Notes: Up through this class things are pretty
+  much slow and easy. The in-class exercises will be key to
+  success. They should include both programming and small group exercises. ***}
+\fi
+
+\item NetLogo as a Conventional Programming Lanuage.
+
+Reading (before class): The Info tab of the Conventional Programming 1
+NetLogo model, found on the Modeling Commons
+(\url{modelingcommons.org}, search ``kimbrough'').
+
+\ifnum\instructor=1
+{\bf *** Instructor Notes: Have in mind a longer lecture, maybe 30--40
+  minutes, with examples, then programming exercises. ***}
+\fi
+
+\item Exploring and Extending Agent-Based Models, 1.
+
+Reading (before class): \citep[chapter 3, pages 101--128]{wilensky_rand_2015},
+``Exploring and Extending Agent-Based Models''.
+
+\ifnum\instructor=1
+{\bf *** Instructor Notes: Cover the Fire model and the DLA model
+  briefly in class, along with key programming material, then set them
+  to work on (a) programming exercises and (b) small group exercises. ***}
+\fi
+
+\item Exploring and Extending Agent-Based Models, 2.
+
+Reading (before class): \citep[chapter 3, pages 128--153]{wilensky_rand_2015},
+``Exploring and Extending Agent-Based Models''.
+
+\ifnum\instructor=1
+{\bf *** Instructor Notes: Cover the Segregation model and the El Farol model
+  briefly in class, along with key programming material, then set them
+  to work on (a) programming exercises and (b) small group exercises. ***}
+\fi
+
+\item Creating Agent-Based Models, 1.
+
+Reading (before class): \citep[chapter 4, pages 157--189]{wilensky_rand_2015},
+``Creating Agent-Based Models''.
+
+\ifnum\instructor=1
+{\bf *** Instructor Notes: Cover the readings
+  briefly in class, along with key programming material, then set them
+  to work on (a) programming exercises and (b) small group exercises. ***}
+\fi
+
+\item Creating Agent-Based Models, 2.
+
+Reading (before class): \citep[chapter 4, pages 189--197]{wilensky_rand_2015},
+``Creating Agent-Based Models''.
+
+\ifnum\instructor=1
+{\bf *** Instructor Notes: Cover the readings
+  briefly in class, along with key programming material. Also lecture
+  and/or have a reading on multiple runs/solution pluralism.  Then set them
+  to work on (a) programming exercises and (b) small group exercises. ***}
+\fi
+
+\item Chapter 5, part 1
+
+\item Chapter 5, part 2
+
+\item Chapter 6, part 1
+
+\item Chapter 6, part 2
+
+\item Chapter 7, part 1
+
+\item Chapter 7, part 2
+
+\item And then \ldots ??
+\end{enumerate}
+\vskip 12 pt
+{\bf Small group assignment hand-ins due: 5 p.m.\ Sunday, May 1, \year.} \marginpar{\bf Small group hand-ins.}
+
+
+%%%%%%%%%
+
+
+
+%
+\newpage
+
+\section{Calendar, Spring \year}
+
+Reading days: April 28--9, \year . Final examinations: May 2--10, \year .
+
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c||c|c|c|} \hline
+   & 0 & 1 & 2  \\ \hline\hline
+  0 & ---  & W: \year -02-17 & W: \year -03-30 \\
+1 & W: \year -01-13 & M: \year -02-22 & M: \year -04-04 \\
+2 & W: \year -01-20 & W: \year -02-24 & W: \year -04-06 \\
+3 & M: \year -01-25 & M: \year -02-29 & M: \year -04-11 \\
+4 & W: \year -01-27 & W: \year -03-02 & W: \year -04-13 \\
+5 & M: \year -02-01 & M: \year -03-14 &  M: \year -04-18 \\
+6 & W: \year -02-03 & W: \year -03-16 & W: \year -04-20 \\
+7 & M: \year -02-08 & M: \year -03-21 & M: \year -04-25 \\
+8 & W: \year -02-10 & W: \year -03-23  &  W: \year -04-27\\
+9 & M: \year -02-15 & M: \year -03-28  & --- \\
+\hline
+\end{tabular}
+\caption{Class number ::  date correlation, for Monday (M) and Wednesday (W) classes, spring \year .}
+\end{table}
+
+\bibliographystyle{apalike} %{amsalpha}
+\bibliography{../../sok,../../union}
+\vfill
+\noindent\verb+$Id: syllabus-doid325-s2016.tex 4938 2015-09-08 21:17:53Z sok $+
+
+\end{document}  

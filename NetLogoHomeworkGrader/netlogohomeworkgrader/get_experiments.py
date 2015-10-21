@@ -26,7 +26,10 @@ def write_experiment_file(nlogo_file, exp_file):
         next_line = nlogo_file.readline()
         while next_line != '' and next_line != '<experiments>\n':
             next_line = nlogo_file.readline()
-        if next_line == '<experiments>\n':
+        if next_line == '':
+            print 'No experiments in this file'
+            return False
+        elif next_line == '<experiments>\n':
             # Copy over all lines in the BehaviorSpace section to the xml file.
             while next_line != '</experiments>\n':
                 exp_file.write(next_line)

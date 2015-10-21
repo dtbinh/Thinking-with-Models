@@ -1,0 +1,218 @@
+% To teach: curation, presentation, feedback
+
+% test account: labsmbatest, wharton1
+% See {\it Notebook} 2008-6-4 pages 6--7,  2008-7-15 pages 38--40 and {\it Daybook}2008-8-14, pages 47--8.
+% On the cosine measure of similarity:
+% http://www.miislita.com/information-retrieval-tutorial/cosine-similarity-tutorial.html
+
+
+ \def\year{2016}
+ \def\lastclass{Wednesday, April 29, \year}
+%  \def\matlabcasedue{9 p.m. on Monday, March 30, 2015}
+%  \def\groupassignmentdue{5 p.m. on Tuesday, May 5, 2015}
+%  \def\pythoncasedue{5 p.m. on Thursday, May 7, 2015}
+% \def\nis{../../../books/RobustDecisionMaking/NewImages/}
+% \def\mlb{MATLAB}
+% \def\mb{{\it DAMbook}}
+\def\noop#1{}
+\def\place{TBA}
+\def\figtop{\rule{\textwidth}{0.5mm}}
+\def\figbot{\rule{\textwidth}{0.5mm}}
+\noop{
+\section{Readings}
+\section{Lecture notes}
+\section{Exercises}
+\section{In class assignments}
+\section{Case assignments}
+  }
+ 
+  
+\newtheorem{exercise}{Exercise}
+\documentclass[11pt]{book}
+\makeindex
+\usepackage{url}
+\usepackage{palatino}
+%
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage{amssymb}
+
+\usepackage{makeidx}
+%\usepackage{geometry}
+%\geometry{textwidth=6.5in}
+
+\usepackage{rotating} % for sideways and sidewaystable, etc. environments
+% the following package, when present, lets the figures and tables orient oppositely on even and odd pages
+\usepackage{lscape} 
+\usepackage{natbib}
+
+\makeindex
+\newcount\draft
+\draft=1
+\newcount\instructor
+\instructor=1
+\newcount\answers
+\answers=1
+%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%\index{BMI!|see{body mass index}}
+
+\pagenumbering{roman}
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{2}
+\frontmatter
+%\nocite{*}
+%
+\pagestyle{empty}
+\centerline{\Huge OID 325: Thinking with Models}
+\vskip 12 pt
+\centerline{\Large Spring \year, \place}
+\vskip 30 pt
+\centerline{\Large In-Class Exercises}
+\vskip 35 pt
+\centerline{\Large Steven O. Kimbrough}
+\vskip 35 pt
+\centerline{Draft: \copyright\ \today}
+
+\ifnum\draft=1
+\vfill
+{\footnotesize
+\noindent\verb+$Id: TwM-s2016-inclass-exercises.tex 4952 2015-09-13 23:53:32Z sok $+
+}
+\fi
+% \newpage
+
+% \noindent Steven O. Kimbrough, %103 Bentley Avenue, Bala Cynwyd, PA 19004--2805. 
+% Tel: (215) 898-5133.  Fax: (215) 898-3664. Email: kimbrough@wharton.upenn.edu. Web: %{\tt http://opim.wharton.upenn.edu/\symbol{126}sok/}.
+% \url{http://opim.wharton.upenn.edu/~sok/}
+
+\newpage
+\pagestyle{plain}
+\tableofcontents
+
+%
+\listoffigures
+
+%
+\listoftables
+
+%\chapter{Executive Summary}
+\chapter{Preface}
+
+\mainmatter
+\pagenumbering{arabic}
+%
+\pagestyle{headings}
+
+%%%%%%%% Class 1, Introduction  %%%%%%%%%%%
+
+%\input chapters/introduction.tex
+\chapter{Introduction}
+
+Today's exercise is simply a warm up for what is to come. With neighbors, form groups of 3--4 for today's exercise. Discuss among yourselves your modeling experiences and write down a short discussion and description of 2--4 models you are acquainted with. These could be models you have worked with or been instructed on, or they could be models you are interested in, etc. As a group, record your comments briefly in an electronic document (Word, \LaTeX , plain text, whatever) and upload it to Canvas, submitting as today's assignment. Be sure to put everyone's name on the document. If you can, upload a separate copy for each person in your group.
+
+\chapter{Working with Patches}
+
+Create a NetLogo model file called {\it Class2.nlogo}, put your work in it, and submit it for today's in-class exercises assignment.
+
+\section{Basic}
+
+\begin{enumerate}
+\item Write a command procedure called \texttt{basic1} that when executed calls \texttt{clear-all} and then sets the color of all patches whose x-coordinate equals 6 or more to yellow. 
+
+Here's a stub for you to work with:
+\begin{verbatim}
+to basic1
+  clear-all
+  [** Your code here. **]
+end
+\end{verbatim}
+
+
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+to basic1
+  clear-all
+  ask patches with [pxcor > 5] [set pcolor yellow]
+end
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+
+\item Write a command procedure called \texttt{basic2} that when executed calls \texttt{clear-all} and then colors each patch yellow with probability 12/100, and then for each patch if it has 3 or more yellow neighbors, sets the patch color to red and sets it label to \texttt{***}
+
+Here's a stub for you to work with:
+\begin{verbatim}
+to basic2
+  clear-all
+  [** Your code here. **]
+end
+\end{verbatim}
+
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+to basic2
+  clear-all
+  ask patches [if random 100 < 12
+    [set pcolor yellow]]
+  ask patches [if count neighbors with [pcolor = yellow] >= 3
+    [set plabel "***"
+      set pcolor red]
+  ] 
+end
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+
+\end{enumerate}
+
+\section{Beyond the Basics}
+
+\chapter{Working with Turtles}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%
+\addcontentsline{toc}{chapter}{References}
+%
+\bibliographystyle{apalike} %{amsalpha} %plain}
+\bibliography{../../sok,../../union}
+
+\addcontentsline{toc}{chapter}{Index}
+%\input 311s2015-teaching-notes-master.ind
+
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\item Write a function that conforms to the following template and documentation.
+
+\begin{verbatim}
+\end{verbatim}
+When you run it, it should behave as follows.
+\begin{verbatim}
+\end{verbatim}
+
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

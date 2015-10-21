@@ -28,3 +28,14 @@ autograde_sample/*/*.csv
 
 # archive
 /archive/
+
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.gz
+*.lot
+*.toc
+*.lof
+*.idx

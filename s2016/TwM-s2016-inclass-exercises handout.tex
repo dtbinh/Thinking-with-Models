@@ -1,0 +1,360 @@
+% To teach: curation, presentation, feedback
+
+% test account: labsmbatest, wharton1
+% See {\it Notebook} 2008-6-4 pages 6--7,  2008-7-15 pages 38--40 and {\it Daybook}2008-8-14, pages 47--8.
+% On the cosine measure of similarity:
+% http://www.miislita.com/information-retrieval-tutorial/cosine-similarity-tutorial.html
+
+
+ \def\year{2016}
+ \def\lastclass{Wednesday, April 29, \year}
+%  \def\matlabcasedue{9 p.m. on Monday, March 30, 2015}
+%  \def\groupassignmentdue{5 p.m. on Tuesday, May 5, 2015}
+%  \def\pythoncasedue{5 p.m. on Thursday, May 7, 2015}
+% \def\nis{../../../books/RobustDecisionMaking/NewImages/}
+% \def\mlb{MATLAB}
+% \def\mb{{\it DAMbook}}
+\def\noop#1{}
+\def\place{TBA}
+\def\figtop{\rule{\textwidth}{0.5mm}}
+\def\figbot{\rule{\textwidth}{0.5mm}}
+\noop{
+\section{Readings}
+\section{Lecture notes}
+\section{Exercises}
+\section{In class assignments}
+\section{Case assignments}
+  }
+ 
+  
+\newtheorem{exercise}{Exercise}
+\documentclass[11pt]{book}
+\makeindex
+\usepackage{url}
+\usepackage{palatino}
+%
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage{amssymb}
+
+\usepackage{makeidx}
+%\usepackage{geometry}
+%\geometry{textwidth=6.5in}
+
+\usepackage{rotating} % for sideways and sidewaystable, etc. environments
+% the following package, when present, lets the figures and tables orient oppositely on even and odd pages
+\usepackage{lscape} 
+\usepackage{natbib}
+
+\makeindex
+\newcount\draft
+\draft=1
+\newcount\instructor
+\instructor=1
+\newcount\answers
+\answers=1
+%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\chapter{Working with Patches}
+
+Create a NetLogo model file called {\it Class2.nlogo}, put your work in it, and submit it for today's in-class exercises assignment.
+
+\section{Basic}
+
+\begin{enumerate}
+\item Write a command procedure called \texttt{basic1} that when executed calls \texttt{clear-all} and then sets the color of all patches whose x-coordinate equals 6 or more to yellow. 
+
+Here's a stub for you to work with:
+\begin{verbatim}
+to basic1
+  clear-all
+  [** Your code here. **]
+end
+\end{verbatim}
+
+
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+to basic1
+  clear-all
+  ask patches with [pxcor > 5] [set pcolor yellow]
+end
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+
+\item Write a command procedure called \texttt{basic2} that when executed calls \texttt{clear-all} and then colors each patch yellow with probability 12/100, and then for each patch if it has 3 or more yellow neighbors, sets the patch color to red and sets it label to \texttt{***}
+
+Here's a stub for you to work with:
+\begin{verbatim}
+to basic2
+  clear-all
+  [** Your code here. **]
+end
+\end{verbatim}
+
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+to basic2
+  clear-all
+  ask patches [if random 100 < 12
+    [set pcolor yellow]]
+  ask patches [if count neighbors with [pcolor = yellow] >= 3
+    [set plabel "***"
+      set pcolor red]
+  ] 
+end
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+
+\item Make a new slider on the interface with range from 0 to 100 in increments of 1 which is called spawn-percentage. Change the setup method so that, on average, spawn-percent percent of the patches begin alive at setup.
+
+You should modify the current setup procedure.
+
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+to setup  
+  ca
+  ask patches [
+    set pcolor blue - 3
+    if random 100 < spawn-percentage [ set pcolor green ]
+  ]
+  reset-ticks
+end
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+
+\item Write a new setup procedure called make-glider that clears the world and makes a glider with its top-left corner at (0,0) which moves down and to the right (see pg. 64 of the textbook).
+
+Here's a stub for you to work with:
+\begin{verbatim}
+to make-glider
+  clear-all
+  [** Your code here. **]
+end
+\end{verbatim}
+
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+to make-glider
+  ca 
+  ask patches [
+    set pcolor blue - 3]
+    ask patch 0 0 [set pcolor green]
+    ask patch 1 -1 [set pcolor green]
+    ask patch 2 -1 [set pcolor green]
+    ask patch 0 -2 [set pcolor green]
+    ask patch 1 -2 [set pcolor green]
+  ]
+  reset-ticks
+end
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+
+\item Find a still-life configuration with five live cells and write a new procedure called make-still which clears the world and creates the still configuration in the neighborhood of (0, 0).
+
+Here's a stub for you to work with:
+\begin{verbatim}
+to make-still
+  clear-all
+  [** Your code here. **]
+end
+\end{verbatim}
+
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+to make-still
+  ca 
+  ask patches [
+    set pcolor blue - 3]
+    ask patch 0 0 [set pcolor green]
+    ask patch 0 -1 [set pcolor green]
+    ask patch 1 0 [set pcolor green]
+    ask patch 2 -1 [set pcolor green]
+    ask patch 1 -2 [set pcolor green]
+end
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+
+\item Find a period two oscillator different from the blinker and write a new procedure call make-oscillator which creates it at the origin. Hint: if you're stuck, try googling game of life oscillators.
+
+Here's a stub for you to work with:
+\begin{verbatim}
+to make-oscillator
+  clear-all
+  [** Your code here. **]
+end
+\end{verbatim}
+
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+to make-oscillator
+  ca ask patches [
+    set pcolor blue - 3
+    ask patch 0 0 [set pcolor green]
+    ask patch 1 0 [set pcolor green]
+    ask patch 2 0 [set pcolor green]
+    ask patch 1 -1 [set pcolor green]
+    ask patch 2 -1 [set pcolor green]
+    ask patch 3 -1 [set pcolor green]
+  ]
+  reset-ticks
+end
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+
+\end{enumerate}
+
+\section{Beyond the Basics}
+\begin{enumerate}
+
+\item Write a procedure called go2 which implements an altered set of transition rules. If a patch is set to die in the old rules, instead of changing its pcolor to blue, change it to yellow. All yellow patches should die at the beginning of each tick.
+
+Here is the basic go procedure for you to work with:
+\begin{verbatim}
+to go
+  ask patches [
+    set live-neighbors count neighbors with [pcolor = green]
+  ]
+  ask patches [
+    if live-neighbors = 3 [set pcolor green]
+    if live-neighbors = 0 or live-neighbors = 1 [set pcolor blue - 3]
+    if live-neighbors >= 4 [set pcolor blue - 3]
+  ]
+end
+\end{verbatim}
+
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+to go2
+  ask patches [
+    set live-neighbors count neighbors with [pcolor = green]
+  ]
+  ask patches [
+    if pcolor = yellow [set pcolor blue - 3]
+    if live-neighbors = 3 [set pcolor green]
+    if (live-neighbors = 0 or live-neighbors = 1) and pcolor = yellow [set pcolor blue - 3]
+    if (live-neighbors = 0 or live-neighbors = 1) and pcolor = green [set pcolor yellow]
+    if live-neighbors >= 4 and pcolor = yellow [set pcolor blue - 3]
+    if live-neighbors >= 4 and pcolor = green [set pcolor yellow]
+  ]
+end
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+
+\item Create four sliders, min-spawn, max-spawn, min-die, and max-die, each of which scales between 0 and 8 in increments of 1. Write a new procedure called go3 which is like the basic go procedure, except it replaces the hard-coded numbers with slider values.
+
+Note: needs further explanation.
+
+Here is the basic go procedure for you to work with:
+\begin{verbatim}
+to go
+  ask patches [
+    set live-neighbors count neighbors with [pcolor = green]
+  ]
+  ask patches [
+    if live-neighbors = 3 [set pcolor green]
+    if live-neighbors = 0 or live-neighbors = 1 [set pcolor blue - 3]
+    if live-neighbors >= 4 [set pcolor blue - 3]
+  ]
+end
+\end{verbatim}
+
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+to go3
+  ask patches [
+    set live-neighbors count neighbors with [pcolor = green]
+  ]
+  ask patches [
+    if (live-neighbors >= min-spawn and 
+        live-neighbors <= max-spawn) [set pcolor green]
+    if live-neighbors <= max-die [set pcolor blue - 3]
+    if live-neighbors >= min-die [set pcolor blue - 3]
+  ]
+end
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%
+\addcontentsline{toc}{chapter}{References}
+%
+\bibliographystyle{apalike} %{amsalpha} %plain}
+\bibliography{../../sok,../../union}
+
+\addcontentsline{toc}{chapter}{Index}
+%\input 311s2015-teaching-notes-master.ind
+
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\item Write a function that conforms to the following template and documentation.
+
+\begin{verbatim}
+\end{verbatim}
+When you run it, it should behave as follows.
+\begin{verbatim}
+\end{verbatim}
+
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
