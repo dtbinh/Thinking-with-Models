@@ -264,23 +264,11 @@ end
 \section{Beyond the Basics}
 \begin{enumerate}
 
-\item Write a procedure called \texttt{go2} which implements an altered set of transition rules. You should begin with a copy of the go procedure, but make the following changes. If a patch is set to die in the old rules (ie. change to \texttt{blue - 3}), instead of changing its pcolor to \texttt{blue - 3}, change it to \texttt{yellow}. All yellow patches should die (ie. change to \texttt{blue - 3}) each tick, before anything else happens. Because of this, neighboring yellow patches should not be counted when deciding whether a cell should die or come to life. When coded correctly, this procedure will have a kind of after-image effect, in which cells fade to yellow before dying completely.
+\item Write a procedure called \texttt{go2} which implements an altered set of transition rules. You should begin with a copy of the go procedure, but make the following changes. If a patch is set to die in the old rules (ie. change to \texttt{blue - 3}), instead of changing its pcolor to \texttt{blue - 3}, change it to \texttt{yellow}. All yellow patches should die (ie. change to \texttt{blue - 3}) each tick, before anything else happens. Because of this, neighboring yellow patches should not be counted when deciding whether a cell should die or come to life. After yellow cells are changed to blue, the procedure should proceed as normal. Note that it is possible for a patch to first change from yellow to blue, then back to green again, in the same tick. When coded correctly, this procedure will have a kind of after-image effect, in which cells fade to yellow before dying completely.
 
 Suggestion: Create a forever button to call \texttt{go2}, in order to more easily test it.
 
-Here is the basic go procedure you should work with:
-\begin{verbatim}
-to go2
-  ask patches [
-    set live-neighbors count neighbors with [pcolor = green]
-  ]
-  ask patches [
-    if live-neighbors = 3 [set pcolor green]
-    if live-neighbors = 0 or live-neighbors = 1 [set pcolor blue - 3]
-    if live-neighbors >= 4 [set pcolor blue - 3]
-  ]
-end
-\end{verbatim}
+You should create a copy of the \texttt{go} procedure named \texttt{go2} and make the alterations in it. Don't forget to call tick at the end of the procedure.
 
 \ifnum\answers=1
 \vskip 6 pt
@@ -295,11 +283,11 @@ to go2
   ask patches [
     if pcolor = yellow [set pcolor blue - 3]
     if live-neighbors = 3 [set pcolor green]
-    if (live-neighbors = 0 or live-neighbors = 1) and pcolor = yellow [set pcolor blue - 3]
-    if (live-neighbors = 0 or live-neighbors = 1) and pcolor = green [set pcolor yellow]
-    if live-neighbors >= 4 and pcolor = yellow [set pcolor blue - 3]
+    if (live-neighbors = 0 or live-neighbors = 1) 
+        and pcolor = green [set pcolor yellow]
     if live-neighbors >= 4 and pcolor = green [set pcolor yellow]
   ]
+  tick
 end
 \end{verbatim}
 \vskip 3 pt
@@ -310,19 +298,7 @@ end
 
 Consider: Do all configurations of the four sliders make sense as valid rule sets? Consider, for instance, the setting in which \texttt{max-under-pop} is greater than \texttt{min-spawn}. In these configurations, it is unclear what the procedure should do. Note that so long as your procedure handles the valid settings, you will pass the automated tests. Of the configurations that do make sense, which ones make for interesting games, and which result in all cells either dying out or coming to life?
 
-Here is the basic go procedure for you to work with:
-\begin{verbatim}
-to go
-  ask patches [
-    set live-neighbors count neighbors with [pcolor = green]
-  ]
-  ask patches [
-    if live-neighbors = 3 [set pcolor green]
-    if live-neighbors = 0 or live-neighbors = 1 [set pcolor blue - 3]
-    if live-neighbors >= 4 [set pcolor blue - 3]
-  ]
-end
-\end{verbatim}
+You should create a copy of the \texttt{go} procedure named \texttt{go2} and make the alterations in it. Don't forget to call tick at the end of the procedure.
 
 \ifnum\answers=1
 \vskip 6 pt
@@ -335,11 +311,49 @@ to go3
     set live-neighbors count neighbors with [pcolor = green]
   ]
   ask patches [
-    if (live-neighbors >= min-spawn and 
-        live-neighbors <= max-spawn) [set pcolor green]
-    if live-neighbors <= max-die [set pcolor blue - 3]
-    if live-neighbors >= min-die [set pcolor blue - 3]
+    if live-neighbors >= min-spawn 
+        and live-neighbors <= max-spawn [set pcolor green]
+    if live-neighbors <= max-under-pop [set pcolor blue - 3]
+    if live-neighbors >= min-over-pop [set pcolor blue - 3]
   ]
+  tick
+end
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+
+\end{enumerate}
+
+\chapter{Working with Turtles}
+
+For today's assignment, you will need to start with and build upon a working version of the Game of Life model, as programmed in the first part of {\it Wilenksy and Rand}, Chapter 2. If you have not created the model, or are uncertain of the correctness of your version, you may download a working version from Canvas. Please code the following procedures in the file and submit it on canvas. The NetLogo file you submit should be called {\it Class3.nlogo}.
+
+\section{Basic}
+
+\begin{enumerate}
+\item Write a command procedure called \texttt{basic1} that when executed calls \texttt{clear-all} and then sets the color of all patches whose x-coordinate equals 6 or more to yellow. 
+
+Suggestion: Create a button on the interface in order to more easily call and test \texttt{basic1}.
+
+Here's a stub for you to work with:
+\begin{verbatim}
+to basic1
+  clear-all
+  [** Your code here. **]
+end
+\end{verbatim}
+
+
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+to basic1
+  clear-all
+  ask patches with [pxcor > 5] [set pcolor yellow]
 end
 \end{verbatim}
 \vskip 3 pt

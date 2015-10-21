@@ -18,6 +18,7 @@ to go
     if live-neighbors = 0 or live-neighbors = 1 [set pcolor blue - 3]
     if live-neighbors >= 4 [set pcolor blue - 3]
   ]
+  tick
 end
 
 to basic1
@@ -79,11 +80,11 @@ to go2
   ask patches [
     if pcolor = yellow [set pcolor blue - 3]
     if live-neighbors = 3 [set pcolor green]
-    if (live-neighbors = 0 or live-neighbors = 1) and pcolor = yellow [set pcolor blue - 3]
-    if (live-neighbors = 0 or live-neighbors = 1) and pcolor = green [set pcolor yellow]
-    if live-neighbors >= 4 and pcolor = yellow [set pcolor blue - 3]
+    if (live-neighbors = 0 or live-neighbors = 1) 
+        and pcolor = green [set pcolor yellow]
     if live-neighbors >= 4 and pcolor = green [set pcolor yellow]
   ]
+  tick
 end
 
 to go3
@@ -91,10 +92,12 @@ to go3
     set live-neighbors count neighbors with [pcolor = green]
   ]
   ask patches [
-    if live-neighbors >= min-spawn and live-neighbors <= max-spawn [set pcolor green]
+    if live-neighbors >= min-spawn 
+        and live-neighbors <= max-spawn [set pcolor green]
     if live-neighbors <= max-under-pop [set pcolor blue - 3]
     if live-neighbors >= min-over-pop [set pcolor blue - 3]
   ]
+  tick
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
@@ -118,8 +121,8 @@ GRAPHICS-WINDOW
 25
 -25
 25
-0
-0
+1
+1
 1
 ticks
 30.0
@@ -269,7 +272,7 @@ min-spawn
 min-spawn
 0
 8
-3
+1
 1
 1
 NIL
@@ -284,7 +287,7 @@ max-spawn
 max-spawn
 0
 8
-3
+5
 1
 1
 NIL
@@ -299,7 +302,7 @@ max-under-pop
 max-under-pop
 0
 8
-1
+2
 1
 1
 NIL
@@ -417,7 +420,7 @@ Hint: If you get stuck, try googling game of life oscillators.
 
 ## Beyond the Basics
 ### 1. `go2`
-Write a procedure called `go2` which implements an altered set of transition rules. You should begin with a copy of the go procedure, but make the following changes. If a patch is set to die in the old rules (ie. change to `blue - 3`), instead of changing its pcolor to `blue - 3`, change it to `yellow`. All yellow patches should die (ie. change to `blue - 3`) each tick, before anything else happens. Because of this, neighboring yellow patches should not be counted when deciding whether a cell should die or come to life. When coded correctly, this procedure will have a kind of after-image effect, in which cells fade to yellow before dying completely.
+Write a procedure called `go2` which implements an altered set of transition rules. You should begin with a copy of the go procedure, but make the following changes. If a patch is set to die in the old rules (ie. change to `blue - 3`), instead of changing its pcolor to `blue - 3`, change it to `yellow`. All yellow patches should die (ie. change to `blue - 3`) each tick, before anything else happens. Because of this, neighboring yellow patches should not be counted when deciding whether a cell should die or come to life. After yellow cells are changed to blue, the procedure should proceed as normal. Note that it is possible for a patch to first change from yellow to blue, then back to green again, in the same tick. When coded correctly, this procedure will have a kind of after-image effect, in which cells fade to yellow before dying completely.
 
 Suggestion: Create a forever button to call `go2`, in order to more easily test it.
 
@@ -737,12 +740,12 @@ NetLogo 5.0.5
 @#$#@#$#@
 @#$#@#$#@
 <experiments>
-  <experiment name="basic1" repetitions="1" runMetricsEveryStep="true">
+  <experiment name="basic1" repetitions="1" runMetricsEveryStep="false">
     <setup>random-seed 17638974
 basic1</setup>
     <timeLimit steps="1"/>
-    <metric>[color] of patches</metric>
-    <enumeratedValueSet variable="min-die">
+    <metric>count patches with [pxcor &gt; 5] = count patches with [pcolor = yellow and pxcor &gt; 5]</metric>
+    <enumeratedValueSet variable="min-over-pop">
       <value value="5"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="max-spawn">
@@ -751,20 +754,20 @@ basic1</setup>
     <enumeratedValueSet variable="spawn-percentage">
       <value value="50"/>
     </enumeratedValueSet>
-    <enumeratedValueSet variable="max-die">
+    <enumeratedValueSet variable="max-under-pop">
       <value value="1"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="min-spawn">
       <value value="4"/>
     </enumeratedValueSet>
   </experiment>
-  <experiment name="basic2" repetitions="1" runMetricsEveryStep="true">
+  <experiment name="basic2" repetitions="1" runMetricsEveryStep="false">
     <setup>random-seed 17638974
 basic2</setup>
     <timeLimit steps="1"/>
-    <metric>[color] of patches</metric>
-    <metric>[plabel] of patches</metric>
-    <enumeratedValueSet variable="min-die">
+    <metric>precision (count patches with [pcolor = yellow] / count patches) 2</metric>
+    <metric>count patches with [pcolor = red] = count patches with [plabel = "dead"] and count patches with [pcolor = red] = count patches with [plabel = "dead" and pcolor = red] and count patches with [pcolor = red] = count patches with [count neighbors with [pcolor = yellow] &gt;= 4]</metric>
+    <enumeratedValueSet variable="min-over-pop">
       <value value="5"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="max-spawn">
@@ -773,9 +776,28 @@ basic2</setup>
     <enumeratedValueSet variable="spawn-percentage">
       <value value="50"/>
     </enumeratedValueSet>
-    <enumeratedValueSet variable="max-die">
+    <enumeratedValueSet variable="max-under-pop">
       <value value="1"/>
     </enumeratedValueSet>
+    <enumeratedValueSet variable="min-spawn">
+      <value value="4"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="spawn-percentage" repetitions="1" runMetricsEveryStep="false">
+    <setup>random-seed 17638974
+setup</setup>
+    <timeLimit steps="1"/>
+    <metric>precision (count patches with [pcolor = green] / count patches) 1</metric>
+    <enumeratedValueSet variable="max-under-pop">
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="max-spawn">
+      <value value="4"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="min-over-pop">
+      <value value="5"/>
+    </enumeratedValueSet>
+    <steppedValueSet variable="spawn-percentage" first="0" step="10" last="100"/>
     <enumeratedValueSet variable="min-spawn">
       <value value="4"/>
     </enumeratedValueSet>
@@ -783,20 +805,22 @@ basic2</setup>
   <experiment name="make-glider" repetitions="1" runMetricsEveryStep="true">
     <setup>random-seed 17638974
 make-glider</setup>
-    <go>go</go>
-    <timeLimit steps="100"/>
-    <metric>[pcolor] of patches</metric>
-    <enumeratedValueSet variable="min-die">
-      <value value="5"/>
+    <go>ask patches [ if pcolor = green [ set plabel "marked"]]
+go</go>
+    <timeLimit steps="10"/>
+    <metric>count patches with [pcolor = green] = 5</metric>
+    <metric>count patches with [plabel = "marked" and pcolor = blue - 3]</metric>
+    <enumeratedValueSet variable="max-under-pop">
+      <value value="1"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="max-spawn">
       <value value="4"/>
     </enumeratedValueSet>
+    <enumeratedValueSet variable="min-over-pop">
+      <value value="5"/>
+    </enumeratedValueSet>
     <enumeratedValueSet variable="spawn-percentage">
       <value value="50"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="max-die">
-      <value value="1"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="min-spawn">
       <value value="4"/>
@@ -805,20 +829,22 @@ make-glider</setup>
   <experiment name="make-still" repetitions="1" runMetricsEveryStep="true">
     <setup>random-seed 17638974
 make-still</setup>
-    <go>go</go>
-    <timeLimit steps="100"/>
-    <metric>[color] of patches</metric>
-    <enumeratedValueSet variable="min-die">
-      <value value="5"/>
+    <go>ask patches [ if pcolor = green [ set plabel "marked"]]
+go</go>
+    <timeLimit steps="10"/>
+    <metric>count patches with [pcolor = green] = 5</metric>
+    <metric>count patches with [plabel = "marked" and pcolor = blue - 3]</metric>
+    <enumeratedValueSet variable="max-under-pop">
+      <value value="1"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="max-spawn">
       <value value="4"/>
     </enumeratedValueSet>
+    <enumeratedValueSet variable="min-over-pop">
+      <value value="5"/>
+    </enumeratedValueSet>
     <enumeratedValueSet variable="spawn-percentage">
       <value value="50"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="max-die">
-      <value value="1"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="min-spawn">
       <value value="4"/>
@@ -826,43 +852,25 @@ make-still</setup>
   </experiment>
   <experiment name="make-oscillator" repetitions="1" runMetricsEveryStep="true">
     <setup>random-seed 17638974
-make-still</setup>
-    <go>go</go>
-    <timeLimit steps="100"/>
-    <metric>[color] of patches</metric>
-    <enumeratedValueSet variable="min-die">
-      <value value="5"/>
+make-oscillator
+ask patches [set plabel 0]
+ask patches with [pcolor = green] [set plabel "*"]</setup>
+    <go>go
+ask patches with [pcolor = green and plabel != "*"] [set plabel "**"]</go>
+    <timeLimit steps="10"/>
+    <metric>count patches with [pcolor = green] &gt; 0</metric>
+    <metric>count patches with [pcolor = green] = count patches with [pcolor = green and plabel = "*"]</metric>
+    <enumeratedValueSet variable="max-under-pop">
+      <value value="1"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="max-spawn">
       <value value="4"/>
     </enumeratedValueSet>
-    <enumeratedValueSet variable="spawn-percentage">
-      <value value="50"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="max-die">
-      <value value="1"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="min-spawn">
-      <value value="4"/>
-    </enumeratedValueSet>
-  </experiment>
-  <experiment name="go3" repetitions="1" runMetricsEveryStep="true">
-    <setup>random-seed 17638974
-setup</setup>
-    <go>go3</go>
-    <timeLimit steps="100"/>
-    <metric>[color] of patches</metric>
-    <enumeratedValueSet variable="min-die">
+    <enumeratedValueSet variable="min-over-pop">
       <value value="5"/>
     </enumeratedValueSet>
-    <enumeratedValueSet variable="max-spawn">
-      <value value="4"/>
-    </enumeratedValueSet>
     <enumeratedValueSet variable="spawn-percentage">
       <value value="50"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="max-die">
-      <value value="1"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="min-spawn">
       <value value="4"/>
@@ -870,27 +878,66 @@ setup</setup>
   </experiment>
   <experiment name="go2" repetitions="1" runMetricsEveryStep="true">
     <setup>random-seed 17638974
-setup</setup>
-    <go>go2</go>
-    <timeLimit steps="100"/>
-    <metric>[color] of patches</metric>
-    <enumeratedValueSet variable="min-die">
-      <value value="5"/>
+setup
+ask patches [set plabel 0]</setup>
+    <go>ask patches [set plabel (count neighbors with [pcolor = green])]
+ask patches with [pcolor = green] [set plabel plabel + 10]
+ask patches with [pcolor = yellow] [set plabel plabel + 20]
+
+go2</go>
+    <timeLimit steps="10"/>
+    <metric>count patches with [plabel mod 10 = 3] = count patches with [plabel mod 10 = 3 and pcolor = green]</metric>
+    <metric>count patches with [plabel &gt;= 20 and (plabel - 20) != 3] = count patches with [plabel &gt;= 20 and (plabel - 20) != 3 and pcolor = blue - 3]</metric>
+    <metric>count patches with [plabel &gt;= 10 and plabel &lt; 20 and (plabel - 10 &lt; 2 or plabel - 10 &gt;= 4)] = count patches with [plabel &gt;= 10 and plabel &lt; 20 and (plabel - 10 &lt; 2 or plabel - 10 &gt;= 4) and pcolor = yellow]</metric>
+    <enumeratedValueSet variable="max-under-pop">
+      <value value="1"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="max-spawn">
       <value value="4"/>
     </enumeratedValueSet>
+    <enumeratedValueSet variable="min-over-pop">
+      <value value="5"/>
+    </enumeratedValueSet>
     <enumeratedValueSet variable="spawn-percentage">
       <value value="10"/>
-      <value value="30"/>
-      <value value="50"/>
-      <value value="100"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="max-die">
-      <value value="1"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="min-spawn">
       <value value="4"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="go3" repetitions="1" runMetricsEveryStep="true">
+    <setup>random-seed 17638974
+setup
+ask patches [set plabel 0]</setup>
+    <go>ask patches [set plabel (count neighbors with [pcolor = green])]
+ask patches with [pcolor = green] [set plabel plabel + 10]
+
+go3</go>
+    <timeLimit steps="10"/>
+    <metric>count patches with [plabel mod 10 &gt; min-spawn and plabel mod 10 &lt; max-spawn and (plabel - 10 &gt; max-under-pop and plabel - 10 &lt; min-over-pop)] = count patches with [plabel mod 10 &gt; min-spawn and plabel mod 10 &lt; max-spawn and (plabel - 10 &gt; max-under-pop and plabel - 10 &lt; min-over-pop) and pcolor = green]</metric>
+    <metric>count patches with [plabel &gt;= 10 and (plabel - 10 &lt;= max-under-pop or plabel - 10 &gt;= min-over-pop)] = count patches with [plabel &gt;= 10 and (plabel - 10 &lt;= max-under-pop or plabel - 10 &gt;= min-over-pop) and pcolor = blue - 3]</metric>
+    <enumeratedValueSet variable="max-under-pop">
+      <value value="0"/>
+      <value value="1"/>
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="max-spawn">
+      <value value="3"/>
+      <value value="4"/>
+      <value value="5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="min-over-pop">
+      <value value="4"/>
+      <value value="6"/>
+      <value value="8"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="spawn-percentage">
+      <value value="10"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="min-spawn">
+      <value value="1"/>
+      <value value="2"/>
+      <value value="3"/>
     </enumeratedValueSet>
   </experiment>
 </experiments>

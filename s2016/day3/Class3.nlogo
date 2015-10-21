@@ -130,7 +130,7 @@ Hint: If you get stuck, try googling game of life oscillators.
 
 ## Beyond the Basics
 ### 1. `go2`
-Write a procedure called `go2` which implements an altered set of transition rules. You should begin with a copy of the go procedure, but make the following changes. If a patch is set to die in the old rules (ie. change to `blue - 3`), instead of changing its pcolor to `blue - 3`, change it to `yellow`. All yellow patches should die (ie. change to `blue - 3`) each tick, before anything else happens. Because of this, neighboring yellow patches should not be counted when deciding whether a cell should die or come to life. When coded correctly, this procedure will have a kind of after-image effect, in which cells fade to yellow before dying completely.
+Write a procedure called `go2` which implements an altered set of transition rules. You should begin with a copy of the go procedure, but make the following changes. If a patch is set to die in the old rules (ie. change to `blue - 3`), instead of changing its pcolor to `blue - 3`, change it to `yellow`. All yellow patches should die (ie. change to `blue - 3`) each tick, before anything else happens. Because of this, neighboring yellow patches should not be counted when deciding whether a cell should die or come to life. After yellow cells are changed to blue, the procedure should proceed as normal. Note that it is possible for a patch to first change from yellow to blue, then back to green again, in the same tick. When coded correctly, this procedure will have a kind of after-image effect, in which cells fade to yellow before dying completely.
 
 Suggestion: Create a forever button to call `go2`, in order to more easily test it.
 

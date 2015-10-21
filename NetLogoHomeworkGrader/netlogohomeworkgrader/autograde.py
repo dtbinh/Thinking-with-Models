@@ -45,6 +45,13 @@ example command:
         directory after -d. (Please note, this cannot be directly copied into
         the terminal. Will require some spaces to be deleted before it is
         properly runnable.)
+        
+Attributes:
+    answer_dir_name (str): The path of the directory containing the answer
+        file, to which other grade files will be written.
+    nlogo_command (str): The command to be run in opt for the behaviorspace
+        experiments in NetLogo.
+    data_file_name (str): The name of the 
 '''
 
 import sys
@@ -52,9 +59,77 @@ import getopt
 import os
 import csv
 from Tkinter import Tk
-from tkFileDialog import askdirectory
+from tkFileDialog import askdirectory, askopenfilename
 from get_experiments import write_experiment_file
 from grade_files import grade_problem, get_problem_grade
+# from Tkinter import tkMessageBox
+
+# Global values and names for running the script.
+answer_dir_name = ''
+nlogo_command = ''
+data_file_name = ''
+
+def get_script_values(main_dir, nlogo_dir):
+    ''' This function sets the global values based on command line flags.
+    
+    This is a setup function which takes in directory names from the command
+    line flags and uses a combination of automatic search and dialog boxes
+    to set all of the critical file names and other values for creating
+    files and running the grading script.
+    
+    args:
+        main_dir (str): The name of the primary directory.
+        nlogo_dir (str): The name of the directory containing the NetLogo.jar
+            file and /lib subdirectory.
+    returns:
+        bool: True if successful, False otherwise.
+    '''
+    # If main_dir or nlogo_dir not set, allow user to select them in a dialog
+    # box. Hide the root window of Tkinter.
+    Tk().withdraw()
+    if not os.path.isdir(str(main_dir)): 
+        main_dir = askdirectory(title='Choose main directory') + '/'
+    if not os.path.isdir(str(nlogo_dir)):
+        nlogo_dir = askdirectory(title='Choose NetLogo directory') + '/'
+    # Initialize some specific names for later commands.
+    answer_dir_name = hw_name + '_files'
+    data_file_name = '/' + hw_name + '_' + prob_name + '.csv'
+    # Check that the directory which is supposed to contain the nlogo answer
+    # file exists. If not, allow the opportunity to choose one.
+    if (not os.path.isdir(main_dir + answer_dir_name) or 
+            not os.path.isfile(main_dir + answer_dir_name + 
+            '/' + hw_name + '_answers.nlogo')):
+        a_d = askdirectory(initialdir=main_dir, 
+                title='Choose an answer directory in your main directory.')
+        # If the directory is valid (ie. directly in main_dir and containting
+        # the netlogo answer file), then accept.
+        if (main_dir in a_d and 
+                os.path.isfile(a_d + '/' + hw_name + '_answers.nlogo')): 
+            answer_dir_name = a_d.replace(main_dir, '')
+        # Otherwise, print an error message and return False.
+        else:
+            print "Please choose a valid directory inside main_dir and " + \
+                    "containing " + hw_name + "_answers.nlogo."
+            return False
+    # Initialize strings for NetLogo command. {0} is for a directory name, {1}
+    # is for part of a file name (student_id or the string 'answers').
+    model_path = '"' + main_dir + '{0}/' + hw_name + '_{1}.nlogo"'
+    setup_file_path = '"' + main_dir + answer_dir_name + '/' + \
+            hw_name + '_experiments.xml"'
+    experiment = prob_name
+    table_path = '"' + main_dir + '{0}' + data_file_name + '"'
+    # Assemble the NetLogo command to be run for each student nlogo file. The
+    # command is based on the function arguments, and has place holders for
+    # student ids.
+    nlogo_command='java -Xmx1024m -Dfile.encoding=UTF-8 -cp NetLogo.jar ' + \
+            'org.nlogo.headless.Main' + \
+            ' --model ' + model_path + \
+            ' --setup-file ' + setup_file_path + \
+            ' --experiment ' + experiment + \
+            ' --table ' + table_path + \
+            ' --threads 1 \n'
+    
+    return True
 
 def run_multiple_grading_commands(hw_num, prob_nums, main_dir, nlogo_dir, 
         grade_only):
@@ -88,7 +163,7 @@ def run_multiple_grading_commands(hw_num, prob_nums, main_dir, nlogo_dir,
     # Return success values.
     return succ_list
 
-def run_grading_commands(hw_num, prob_num, main_dir, nlogo_dir, grade_only):
+def run_grading_commands(hw_name, prob_name, main_dir, nlogo_dir, grade_only):
     '''This function runs all commands for grading a particular problem.
     
     Where applicable, commands are run through direct calls to python
@@ -113,65 +188,21 @@ def run_grading_commands(hw_num, prob_num, main_dir, nlogo_dir, grade_only):
             them.
     Returns:
         list: True if successful, False otherwise.
-    '''
-    # If main_dir or nlogo_dir not set, allow user to select them in a dialog
-    # box. Hide the root window of Tkinter.
-    Tk().withdraw()
-    if not os.path.isdir(str(main_dir)): 
-        main_dir = askdirectory(title='Choose main directory') + '/'
-    if not os.path.isdir(str(nlogo_dir)):
-        nlogo_dir = askdirectory(title='Choose NetLogo directory') + '/'
-    # Initialize some specific names for later commands.
-    answer_dir_name = 'hw' + hw_num + '_files'
-    data_file_name = '/hw' + hw_num + '_prob' + prob_num + '.csv'
-    # Check that the directory which is supposed to contain the nlogo answer
-    # file exists. If not, allow the opportunity to choose one.
-    if (not os.path.isdir(main_dir + answer_dir_name) or 
-            not os.path.isfile(main_dir + answer_dir_name + 
-            '/hw' + hw_num + '_answers.nlogo')):
-        a_d = askdirectory(initialdir=main_dir, 
-                title='Choose an answer directory in your main directory.')
-        # If the directory is valid (ie. directly in main_dir and containting
-        # the netlogo answer file), then accept.
-        if (main_dir in a_d and 
-                os.path.isfile(a_d + '/hw' + hw_num + '_answers.nlogo')): 
-            answer_dir_name = a_d.replace(main_dir, '')
-        # Otherwise, print an error message and return False.
-        else:
-            print "Please choose a valid directory inside main_dir and " + \
-                    "containing hw" + hw_num + "_answers.nlogo."
-            return False
-    # Initialize strings for NetLogo command. {0} is for a directory name, {1}
-    # is for part of a file name (student_id or the string 'answers').
-    model_path = '"' + main_dir + '{0}/hw' + hw_num + '_{1}.nlogo"'
-    setup_file_path = '"' + main_dir + answer_dir_name + '/hw' + \
-            hw_num + '_experiments.xml"'
-    experiment = 'prob' + prob_num
-    table_path = '"' + main_dir + '{0}' + data_file_name + '"'
-    # Assemble the NetLogo command to be run for each student nlogo file. The
-    # command is based on the function arguments, and has place holders for
-    # student ids.
-    nlogo_command='java -Xmx1024m -Dfile.encoding=UTF-8 -cp NetLogo.jar ' + \
-            'org.nlogo.headless.Main' + \
-            ' --model ' + model_path + \
-            ' --setup-file ' + setup_file_path + \
-            ' --experiment ' + experiment + \
-            ' --table ' + table_path + \
-            ' --threads 1 \n'
-            
+    '''        
     # If creating files, create the experiment file.
     if not grade_only:
         write_experiment_file(
                 open(main_dir + answer_dir_name + 
-                '/hw' + hw_num + '_answers.nlogo'), 
+                '/' + hw_name + '_answers.nlogo'), 
                 open(main_dir + answer_dir_name + 
-                '/hw' + hw_num + '_experiments.xml', 'w'))
+                '/' + hw_name + '_experiments.xml', 'w'))
     # If creating files, Change to directory containing NetLogo.jar and call
     # system to produce csv answer file. Get path of answer file.
     if not grade_only:
         os.chdir(nlogo_dir)
         os.system(nlogo_command.format(answer_dir_name, 'answers'))
     ans_path = main_dir + answer_dir_name + data_file_name
+    
     # Grade student nlogo files.
     for h in os.listdir(main_dir):
         # Student subdirectories are identified as those directories which have
@@ -183,12 +214,12 @@ def run_grading_commands(hw_num, prob_num, main_dir, nlogo_dir, grade_only):
             # Grade csv files against answer file and record grades.
             stud_path = main_dir + h + data_file_name
             record_grade(get_problem_grade(grade_problem(ans_path, stud_path)),
-                    h, hw_num, prob_num, 
+                    h, hw_name, prob_name, 
                     main_dir + '/grades.csv')
-    os.system('echo "Graded ' + hw_num + '.' + prob_num + '"')
+    os.system('echo "Graded ' + hw_name + '.' + prob_name + '"')
     return True
 
-def record_grade(grade, student_id, hw_num, prob_num, grade_file_path):
+def record_grade(grade, student_id, hw_name, prob_name, grade_file_path):
     '''This records the given grade in the correct location in the grade file.
 
     This functions maintains a csv grade file, where each row is a different
@@ -212,7 +243,7 @@ def record_grade(grade, student_id, hw_num, prob_num, grade_file_path):
     except:
         grade_table = []
     # Add or change value in the grade table.
-    col_name = hw_num + '.' + prob_num
+    col_name = hw_name + '.' + prob_name
     # If grade_table is empty, initialize it with the new student_id and value.
     if grade_table == []:
         grade_table.append(['*', col_name])
@@ -297,10 +328,14 @@ def main(argv):
     # No extra arguments
     for arg in args:
         pass
-    # Must set homework and problem numbers. If not, fail and print help.
-    if hw_num == -1 or prob_num == -1:
+    # Must set homework number. If not, fail and print help.
+    if hw_num == -1:
         print "Please use all required flags.\n"
         print(__doc__)
+        
+    # If no problem number set, find and grade all problems.
+    if prob_num == -1:
+        
     # If correct, run the autograde function.
     else:
         return run_multiple_grading_commands(hw_num, prob_num, main_dir, 
