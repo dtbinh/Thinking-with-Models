@@ -51,7 +51,8 @@ Attributes:
         file, to which other grade files will be written.
     nlogo_command (str): The command to be run in opt for the behaviorspace
         experiments in NetLogo.
-    data_file_name (str): The name of the 
+    data_file_name (str): The name of the file to which to write the output of
+        behaviorspace runs.
 '''
 
 import sys

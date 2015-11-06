@@ -2,7 +2,7 @@
 *.swf
 
 # working files
-*~
+*~*
 
 # answer files
 answers_*
@@ -39,3 +39,4 @@ autograde_sample/*/*.csv
 *.toc
 *.lof
 *.idx
+*.ini

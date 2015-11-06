@@ -1,0 +1,8 @@
+"BehaviorSpace results (NetLogo 5.0.5)"
+"Class4_answers.nlogo"
+"basic1"
+"10/28/2015 11:29:25:906 -0400"
+"min-pxcor","max-pxcor","min-pycor","max-pycor"
+"-16","16","-16","16"
+"[run number]","personalities","number","[step]","count turtles = count turtles with [heading = 90 and color = green and pcolor = blue]","count patches with [pcolor != blue and count turtles-here > 0] = 0"
+"1","""mixed""","68","1","true","true"

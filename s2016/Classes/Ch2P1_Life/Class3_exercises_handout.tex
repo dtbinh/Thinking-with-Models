@@ -1,0 +1,395 @@
+% To teach: curation, presentation, feedback
+
+% test account: labsmbatest, wharton1
+% See {\it Notebook} 2008-6-4 pages 6--7,  2008-7-15 pages 38--40 and {\it Daybook}2008-8-14, pages 47--8.
+% On the cosine measure of similarity:
+% http://www.miislita.com/information-retrieval-tutorial/cosine-similarity-tutorial.html
+
+
+ \def\year{2016}
+ \def\lastclass{Wednesday, April 29, \year}
+%  \def\matlabcasedue{9 p.m. on Monday, March 30, 2015}
+%  \def\groupassignmentdue{5 p.m. on Tuesday, May 5, 2015}
+%  \def\pythoncasedue{5 p.m. on Thursday, May 7, 2015}
+% \def\nis{../../../books/RobustDecisionMaking/NewImages/}
+% \def\mlb{MATLAB}
+% \def\mb{{\it DAMbook}}
+\def\noop#1{}
+\def\place{TBA}
+\def\figtop{\rule{\textwidth}{0.5mm}}
+\def\figbot{\rule{\textwidth}{0.5mm}}
+\noop{
+\section{Readings}
+\section{Lecture notes}
+\section{Exercises}
+\section{In class assignments}
+\section{Case assignments}
+  }
+ 
+  
+\newtheorem{exercise}{Exercise}
+\documentclass[11pt]{book}
+\makeindex
+\usepackage{url}
+\usepackage{palatino}
+%
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage{amssymb}
+
+\usepackage{makeidx}
+%\usepackage{geometry}
+%\geometry{textwidth=6.5in}
+
+\usepackage{rotating} % for sideways and sidewaystable, etc. environments
+% the following package, when present, lets the figures and tables orient oppositely on even and odd pages
+\usepackage{lscape} 
+\usepackage{natbib}
+
+\makeindex
+\newcount\draft
+\draft=1
+\newcount\instructor
+\instructor=1
+\newcount\answers
+\answers=1
+\setcounter{chapter}{2}
+\renewcommand{\chaptername}{Class}
+%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\chapter{Working with Patches}
+
+For today's assignment, you will need to start with and build upon a working version of the Game of Life model, as programmed in the first part of {\it Wilenksy and Rand}, Chapter 2. If you have not created the model, or are uncertain of the correctness of your version, you may download a working version from Canvas. Please code the following procedures in the file and submit it on canvas. The NetLogo file you submit should be called {\it Class3.nlogo}.
+
+\section{Basic}
+
+\begin{enumerate}
+\item Write a command procedure called \texttt{basic1} that when executed calls \texttt{clear-all} and then sets the color of all patches whose x-coordinate equals 6 or more to yellow. 
+
+Suggestion: Create a button on the interface in order to more easily call and test \texttt{basic1}.
+
+Here's a stub for you to work with:
+\begin{verbatim}
+to basic1
+  clear-all
+  [** Your code here. **]
+end
+\end{verbatim}
+
+
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+to basic1
+  clear-all
+  ask patches with [pxcor > 5] [set pcolor yellow]
+end
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+
+\item Write a command procedure called \texttt{basic2} that when executed calls \texttt{clear-all} and then colors each patch yellow with probability 12/100, and then for each patch if it has 4 or more yellow neighbors, sets the patch color to red and sets it label to \texttt{dead}.
+
+Here's a stub for you to work with:
+\begin{verbatim}
+to basic2
+  clear-all
+  [** Your code here. **]
+end
+\end{verbatim}
+
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+to basic2
+  clear-all
+  ask patches [if random 100 < 12
+    [set pcolor yellow]]
+  ask patches [if count neighbors with [pcolor = yellow] >= 4
+    [set plabel "dead"
+      set pcolor red]
+  ]
+end
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+
+\item Make a new slider called \texttt{spawn-percentage} on the interface. It should range from 0 to 100 in increments of 1. Change the \texttt{setup} method so that, on average, \texttt{spawn-percent}$\%$, instead of always $10 \%$, of the patches begin alive at setup.
+
+Consider: Test what are the lowest and highest percentages at which life can survive beyond the first few ticks.
+
+You should modify the current setup procedure:
+\begin{verbatim}
+to setup  
+  ca
+  ask patches [
+    set pcolor blue - 3
+    if random 100 < 10 [ set pcolor green ]
+  ]
+  reset-ticks
+end
+\end{verbatim}
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+to setup  
+  ca
+  ask patches [
+    set pcolor blue - 3
+    if random 100 < spawn-percentage [ set pcolor green ]
+  ]
+  reset-ticks
+end
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+
+\item Write a new setup procedure called \texttt{make-glider} that clears the world and makes a glider with its top-left corner at (0,0). The glider should move down and to the right, as shown in the book (see pg. 64 of {\it Wilensky and Rand}).
+
+Here's a stub for you to work with:
+\begin{verbatim}
+to make-glider
+  clear-all
+  [** Your code here. **]
+end
+\end{verbatim}
+
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+to make-glider
+  ca 
+  ask patches [
+    set pcolor blue - 3]
+    ask patch 0 0 [set pcolor green]
+    ask patch 1 -1 [set pcolor green]
+    ask patch 2 -1 [set pcolor green]
+    ask patch 0 -2 [set pcolor green]
+    ask patch 1 -2 [set pcolor green]
+  ]
+  reset-ticks
+end
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+
+\item Find a still-life configuration with exactly five live cells and write a new procedure called \texttt{make-still} which clears the world and creates the still configuration near the center of the view. When \texttt{make-still} is run, there should be exactly five green cells on the view, and nothing should change when \texttt{go} is run. See pg. 60-63 of {\it Wilensky and Rand} for more detail on what a still-life configuration is.
+
+Hint: If you get stuck, try googling game of life still life configurations.
+
+Here's a stub for you to work with:
+\begin{verbatim}
+to make-still
+  clear-all
+  [** Your code here. **]
+end
+\end{verbatim}
+
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+to make-still
+  ca 
+  ask patches [
+    set pcolor blue - 3]
+    ask patch 0 0 [set pcolor green]
+    ask patch 0 -1 [set pcolor green]
+    ask patch 1 0 [set pcolor green]
+    ask patch 2 -1 [set pcolor green]
+    ask patch 1 -2 [set pcolor green]
+end
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+
+\item Find a period two oscillator different from the blinker and write a new procedure called \texttt{make-oscillator} which creates it near the center of the view. See pg. 63 of {\it Wilensky and Rand} for more detail on what an oscillator is.
+
+Hint: If you get stuck, try googling game of life oscillators.
+
+Here's a stub for you to work with:
+\begin{verbatim}
+to make-oscillator
+  clear-all
+  [** Your code here. **]
+end
+\end{verbatim}
+
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+to make-oscillator
+  ca ask patches [
+    set pcolor blue - 3
+    ask patch 0 0 [set pcolor green]
+    ask patch 1 0 [set pcolor green]
+    ask patch 2 0 [set pcolor green]
+    ask patch 1 -1 [set pcolor green]
+    ask patch 2 -1 [set pcolor green]
+    ask patch 3 -1 [set pcolor green]
+  ]
+  reset-ticks
+end
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+
+\end{enumerate}
+
+\section{Beyond the Basics}
+\begin{enumerate}
+
+\item Write a procedure called \texttt{go2} which implements an altered set of transition rules. You should begin with a copy of the go procedure, but make the following changes. If a patch is set to die in the old rules (ie. change to \texttt{blue - 3}), instead of changing its pcolor to \texttt{blue - 3}, change it to \texttt{yellow}. All yellow patches should die (ie. change to \texttt{blue - 3}) each tick, before anything else happens. Because of this, neighboring yellow patches should not be counted when deciding whether a cell should die or come to life. After yellow cells are changed to blue, the procedure should proceed as normal. Note that it is possible for a patch to first change from yellow to blue, then back to green again, in the same tick. When coded correctly, this procedure will have a kind of after-image effect, in which cells fade to yellow before dying completely.
+
+Suggestion: Create a forever button to call \texttt{go2}, in order to more easily test it.
+
+You should create a copy of the \texttt{go} procedure named \texttt{go2} and make the alterations in it. Don't forget to call tick at the end of the procedure.
+
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+to go2
+  ask patches [
+    set live-neighbors count neighbors with [pcolor = green]
+  ]
+  ask patches [
+    if pcolor = yellow [set pcolor blue - 3]
+    if live-neighbors = 3 [set pcolor green]
+    if (live-neighbors = 0 or live-neighbors = 1) 
+        and pcolor = green [set pcolor yellow]
+    if live-neighbors >= 4 and pcolor = green [set pcolor yellow]
+  ]
+  tick
+end
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+
+\item Create four sliders, \texttt{min-spawn, max-spawn, min-over-pop,} and \texttt{max-under-pop,} each of which scales between 0 and 8 in increments of 1. Write a new procedure called \texttt{go3} on the model of \texttt{go}, except replacing the hard-coded numbers with slider values. If the number of a cell's live neighbors is both greater-than-or-equal-to \texttt{min-spawn} and less-than-or-equal-to \texttt{max-spawn}, the cell should come to life (ie. turn green). In other words, \texttt{min-spawn} and \texttt{max-spawn} are the lower and upper bounds, respectively, on neighbors for the birth of new life. On the other hand, if the number of a cell's live neighbors is either less-than-or-equal-to \texttt{max-under-pop} or greater-than-or-equal-to \texttt{min-over-pop}, the cell should die (ie. change color to \texttt{blue - 3}). In other words, \texttt{max-under-pop} is the maximum number of neighbors for which a cell will die due to underpopulation, and \texttt{min-over-pop} the minimum number of neighbors for which a cell will die due to overpopulation. Putting in slider variables in place of the hard-coded numbers generalizes the rules of the game, allowing you to run different kinds of rule configurations. Note that the rules of the original game are as follows: \texttt{min-spawn = 3, max-spawn = 3, max-under-pop = 1, min-over-pop = 4} (Think about why this is the case).
+
+Consider: Do all configurations of the four sliders make sense as valid rule sets? Consider, for instance, the setting in which \texttt{max-under-pop} is greater than \texttt{min-spawn}. In these configurations, it is unclear what the procedure should do. Note that so long as your procedure handles the valid settings, you will pass the automated tests. Of the configurations that do make sense, which ones make for interesting games, and which result in all cells either dying out or coming to life?
+
+You should create a copy of the \texttt{go} procedure named \texttt{go2} and make the alterations in it. Don't forget to call tick at the end of the procedure.
+
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+to go3
+  ask patches [
+    set live-neighbors count neighbors with [pcolor = green]
+  ]
+  ask patches [
+    if live-neighbors >= min-spawn 
+        and live-neighbors <= max-spawn [set pcolor green]
+    if live-neighbors <= max-under-pop [set pcolor blue - 3]
+    if live-neighbors >= min-over-pop [set pcolor blue - 3]
+  ]
+  tick
+end
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+
+\end{enumerate}
+
+\chapter{Working with Turtles}
+
+For today's assignment, you will need to start with and build upon a working version of the Game of Life model, as programmed in the first part of {\it Wilenksy and Rand}, Chapter 2. If you have not created the model, or are uncertain of the correctness of your version, you may download a working version from Canvas. Please code the following procedures in the file and submit it on canvas. The NetLogo file you submit should be called {\it Class3.nlogo}.
+
+\section{Basic}
+
+\begin{enumerate}
+\item Write a command procedure called \texttt{basic1} that when executed calls \texttt{clear-all} and then sets the color of all patches whose x-coordinate equals 6 or more to yellow. 
+
+Suggestion: Create a button on the interface in order to more easily call and test \texttt{basic1}.
+
+Here's a stub for you to work with:
+\begin{verbatim}
+to basic1
+  clear-all
+  [** Your code here. **]
+end
+\end{verbatim}
+
+
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+to basic1
+  clear-all
+  ask patches with [pxcor > 5] [set pcolor yellow]
+end
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%
+\addcontentsline{toc}{chapter}{References}
+%
+\bibliographystyle{apalike} %{amsalpha} %plain}
+\bibliography{../../sok,../../union}
+
+\addcontentsline{toc}{chapter}{Index}
+%\input 311s2015-teaching-notes-master.ind
+
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\item Write a function that conforms to the following template and documentation.
+
+\begin{verbatim}
+\end{verbatim}
+When you run it, it should behave as follows.
+\begin{verbatim}
+\end{verbatim}
+
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
