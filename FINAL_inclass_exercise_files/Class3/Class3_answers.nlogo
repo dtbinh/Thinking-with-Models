@@ -4,7 +4,9 @@ to setup
   ca
   ask patches [
     set pcolor blue - 3
-    if random 100 < spawn-percentage [ set pcolor green ]
+    if random 100 < spawn-percentage [ 
+      set pcolor green 
+    ]
   ]
   reset-ticks
 end
@@ -28,11 +30,14 @@ end
 
 to basic2
   clear-all
-  ask patches [if random 100 < 12
-    [set pcolor yellow]]
-  ask patches [if count neighbors with [pcolor = yellow] >= 4
-    [set plabel "dead"
-      set pcolor red]
+  ask patches [
+    if random 100 < 12 [ set pcolor yellow ]
+  ]
+  ask patches [
+    if count neighbors with [pcolor = yellow] >= 4 [
+      set plabel "dead"
+      set pcolor red
+    ]
   ] 
 end
 
@@ -75,14 +80,17 @@ end
 
 to go2
   ask patches [
-    set live-neighbors count neighbors with [pcolor = green]
+    set live-neighbors 
+        count neighbors with [pcolor = green]
   ]
   ask patches [
     if pcolor = yellow [set pcolor blue - 3]
     if live-neighbors = 3 [set pcolor green]
     if (live-neighbors = 0 or live-neighbors = 1) 
         and pcolor = green [set pcolor yellow]
-    if live-neighbors >= 4 and pcolor = green [set pcolor yellow]
+    if live-neighbors >= 4 and pcolor = green [
+      set pcolor yellow
+    ]
   ]
   tick
 end
@@ -272,7 +280,7 @@ min-spawn
 min-spawn
 0
 8
-1
+3
 1
 1
 NIL
@@ -287,7 +295,7 @@ max-spawn
 max-spawn
 0
 8
-5
+8
 1
 1
 NIL
@@ -302,7 +310,7 @@ max-under-pop
 max-under-pop
 0
 8
-2
+1
 1
 1
 NIL
@@ -317,7 +325,7 @@ min-over-pop
 min-over-pop
 0
 8
-4
+8
 1
 1
 NIL
@@ -349,7 +357,7 @@ spawn-percentage
 spawn-percentage
 0
 100
-10
+25
 1
 1
 NIL
@@ -735,7 +743,7 @@ Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 
 @#$#@#$#@
-NetLogo 5.0.5
+NetLogo 5.1.0
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@

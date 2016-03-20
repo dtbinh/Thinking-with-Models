@@ -40,3 +40,5 @@ autograde_sample/*/*.csv
 *.lof
 *.idx
 *.ini
+*.ilg 
+*.ind

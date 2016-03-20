@@ -499,13 +499,208 @@ end
 
 \end{enumerate}
 
-%%%%%%%%%%%%%%%%%%%
-\addcontentsline{toc}{chapter}{References}
-%
-\bibliographystyle{apalike} %{amsalpha} %plain}
-\bibliography{../../sok,../../union}
+\chapter{Extracting Data}
 
-\addcontentsline{toc}{chapter}{Index}
+General info for assignment
+%For today's assignment, you will need to start with and build upon a working version of the Game of Life model, as programmed in the first part of {\it Wilenksy and Rand}, Chapter 2. If you have not created the model, or are uncertain of the correctness of your version, you may download a working version from Canvas. Please code the following procedures in the file and submit it on canvas. The NetLogo file you submit should be called {\it Class3.nlogo}.
+
+\section{Basic}
+
+\begin{enumerate}
+\item Instructions
+
+Here's a stub for you to work with:
+\begin{verbatim}
+Stub
+\end{verbatim}
+
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+Answer
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+
+\end{enumerate}
+
+\section{Beyond the Basics}
+\begin{enumerate}
+
+\item Instructions
+
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+Answer
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+
+\end{enumerate}
+
+\chapter{***}
+
+General info for assignment
+%For today's assignment, you will need to start with and build upon a working version of the Game of Life model, as programmed in the first part of {\it Wilenksy and Rand}, Chapter 2. If you have not created the model, or are uncertain of the correctness of your version, you may download a working version from Canvas. Please code the following procedures in the file and submit it on canvas. The NetLogo file you submit should be called {\it Class3.nlogo}.
+
+\section{Basic}
+
+\begin{enumerate}
+\item Based on the suggestion on \textit{Wilensky and Rand}, page 105, can you write rules for the setup procedure so that the same number of trees will be randomly created on each run of the model? Make a new slider called \texttt{num-trees} which ranges from 0 to 62750 in increments of 1 (why 62750? see note below). Crite a new procedure called \texttt{setup2}, which randomly creates \texttt{num-trees} green patches. 
+
+Note: Don't forget to handle the fact that the left most column of patches should begin colored red. The patches which are colored green should be chosen only out of those which are not then colored red, to insure that the same number is chosen every time.
+
+You should copy the existing procedure \texttt{setup} and modify it.
+
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+to setup2
+  clear-all
+  ask n-of num-trees patches with [pxcor > min-pxcor] [
+    set pcolor green
+  ]
+  ask patches [
+    if pxcor = min-pxcor 
+    [ set pcolor red ] 
+  ]
+  set initial-trees count patches with [pcolor = green]
+  reset-ticks
+end
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+
+\item Create a reporter procedure called \texttt{fire-patches} (See \textit{W\&G} pg. 108) which reports an agentset of all the red patches. Modify the \texttt{go} procedure to use \texttt{fire-patches} instead of the current code, as shown in the text book.
+
+You should modify the existing \texttt{go} procedure.
+
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+to go
+  ...
+  ask fire-patches [
+    ...
+  ]
+end
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+
+\item Create a new slider called \texttt{probability-of-spark}. Modify the existing \texttt{go} procedure so that sparks appear in the same location but only happen \texttt{probability-of-spark}\% of the time. 
+	
+You should modify the existing \texttt{go} procedure.
+
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+to go
+  ...
+  ask fire-patches [
+    ask neighbors4 with [pcolor = green] [
+      ...
+      if random 100 < probability [
+        set pcolor red ;; to catch on fire
+
+        if  big-jumps? [
+          let target patch-at ( west-wind-speed / 5 ) 
+              ( south-wind-speed / 5 ) 
+          if target != nobody and 
+              [pcolor] of target = green and 
+              random 100 < probability-of-spark [
+            ask target [
+              set pcolor red 
+            ] 
+          ]
+        ]
+      ]
+    ]
+    set pcolor red - 3.5
+  ]
+
+  tick   ;; advance the clock by one “tick”
+end
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+
+\item Create a new setup procedure called \texttt{setup3} which is the same as the ordinary \texttt{setup} except, instead of an entire column of red patches, it creates a single, randomly-placed red patch on the view.
+	
+You should copy and modify the existing \texttt{setup} procedure.
+
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+to setup3
+  clear-all
+  ask patches [
+    if (random 100) < density 
+    [ set pcolor green ] 
+  ]
+  ask one-of patches [ set pcolor red]
+  set initial-trees count patches with [pcolor = green]
+  reset-ticks
+end
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+
+\end{enumerate}
+
+\section{Beyond the Basics}
+\begin{enumerate}
+
+\item Create a new procedure called \texttt{go2} which modifies the existing procedure, representing sparks as turtles. Whenever a new patch is changed to red, if \texttt{big-jumps?} is true, instead of changing a far away patch to red as well, it should spawn new red turtle with probability \texttt{probability-of-spark} (see dictionary for the \texttt{spawn} command). Each tick, after all patch commands have been executed, each turtle should set its heading in the direction of the wind, wiggle, and move forward 1. Finally, create a new slider called \texttt{probability-of-falling}, ranging from 1 to 100 in increments of 1. With probability \texttt{probability-of-falling} each spark should die and set the patch it is on on fire, if that patch is green.
+
+You should begin with and modify the existing \texttt{go} procedure.
+
+\ifnum\answers=1
+\vskip 6 pt
+\hrule
+\vskip 3 pt
+{\bf Answer: }
+\begin{verbatim}
+Answer
+\end{verbatim}
+\vskip 3 pt
+\hrule
+\fi
+
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%
+%\addcontentsline{toc}{chapter}{References}
+%
+%\bibliographystyle{apalike} %{amsalpha} %plain}
+%\bibliography{../../sok,../../union}
+
+%\addcontentsline{toc}{chapter}{Index}
 %\input 311s2015-teaching-notes-master.ind
 
 \end{document}

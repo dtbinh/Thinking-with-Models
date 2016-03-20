@@ -1,7 +1,5 @@
 turtles-own [ friend enemy ]
 
-;; #### ORIGINAL HEROES AND COWARDS CODE ####
-
 to setup
   clear-all
   ask patches [ set pcolor white ]  ;; create a blank background
@@ -49,46 +47,6 @@ to preset [ seed ]
   set number 68
   random-seed seed
   setup
-end
-
-;; #### HW CODE ####
-
-to basic1
-  ca
-  crt num-turtles [
-    setxy random-xcor random-ycor
-    set color green
-    set heading 90
-    set pcolor blue
-  ]
-end
-
-to basic2 
-  ca
-  
-end
-
-to non-static 
-  preset 110
-end
-
-to go-deterministic
-  ask turtles [
-    if (color = blue)  [ 
-      facexy ([xcor] of friend + [xcor] of enemy) / 2
-          ([ycor] of friend + [ycor] of enemy) / 2
-    ]
-    if (color = red)   [ 
-      facexy [xcor] of friend + 
-          ([xcor] of friend - [xcor] of enemy) / 2
-          [ycor] of friend + 
-          ([ycor] of friend - [ycor] of enemy) / 2
-    ]
-  ]
-  ask turtles [
-    fd 0.1
-  ]
-  tick
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
@@ -339,89 +297,6 @@ NIL
 NIL
 NIL
 1
-
-BUTTON
-745
-40
-822
-73
-NIL
-basic1
-NIL
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
-
-BUTTON
-825
-40
-902
-73
-NIL
-basic2\n
-NIL
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
-
-BUTTON
-905
-40
-1007
-73
-NIL
-non-static
-NIL
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
-
-BUTTON
-745
-315
-892
-348
-NIL
-go-deterministic
-T
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
-
-SLIDER
-1010
-40
-1182
-73
-num-turtles
-num-turtles
-0
-300
-50
-1
-1
-NIL
-HORIZONTAL
 
 @#$#@#$#@
 ## ACKNOWLEDGEMENT
@@ -776,49 +651,10 @@ Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 
 @#$#@#$#@
-NetLogo 5.0.5
+NetLogo 5.2.0-RC4
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
-<experiments>
-  <experiment name="basic1" repetitions="1" runMetricsEveryStep="false">
-    <setup>basic1</setup>
-    <timeLimit steps="1"/>
-    <metric>count turtles = count turtles with [heading = 90 and color = green and pcolor = blue]</metric>
-    <metric>count patches with [pcolor != blue and count turtles-here &gt; 0] = 0</metric>
-    <metric>count turtles = num-turtles</metric>
-    <enumeratedValueSet variable="personalities">
-      <value value="&quot;mixed&quot;"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="number">
-      <value value="68"/>
-    </enumeratedValueSet>
-  </experiment>
-  <experiment name="basic2" repetitions="1" runMetricsEveryStep="false">
-    <setup>basic1</setup>
-    <timeLimit steps="1"/>
-    <metric>count turtles = count turtles with [heading = 90 and color = green and pcolor = blue]</metric>
-    <metric>count patches with [pcolor != blue and count turtles-here &gt; 0] = 0</metric>
-    <enumeratedValueSet variable="personalities">
-      <value value="&quot;mixed&quot;"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="number">
-      <value value="68"/>
-    </enumeratedValueSet>
-  </experiment>
-  <experiment name="non-static" repetitions="1" runMetricsEveryStep="false">
-    <setup>non-static</setup>
-    <timeLimit steps="10000"/>
-    <metric>count turtles = count turtles with [heading = 90 and color = green and pcolor = blue]</metric>
-    <metric>count patches with [pcolor != blue and count turtles-here &gt; 0] = 0</metric>
-    <enumeratedValueSet variable="personalities">
-      <value value="&quot;mixed&quot;"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="number">
-      <value value="68"/>
-    </enumeratedValueSet>
-  </experiment>
-</experiments>
 @#$#@#$#@
 @#$#@#$#@
 default
