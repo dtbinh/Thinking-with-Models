@@ -40,6 +40,7 @@ def grade_problem(ans_path, stud_path):
             stud_reader = csv.reader(stud)
             # Store the list of the variable names.
             var_names = ans.next()
+#             print var_names, stud.next()
             # Make sure that both files have the same variables in the same order.
             if var_names != stud.next(): 
                 print "Incorrect csv files: wrong variable names."

@@ -18,6 +18,7 @@ def write_experiment_file(nlogo_file, exp_file):
     Returns:
         bool: True if successful, False otherwise.
     '''
+    exp_list = []
     try:
         # Set DOCTYPE: necessary to run headless as experiment files.
         exp_file.write('<?xml version="1.0" encoding="us-ascii"?>\n' +
@@ -28,14 +29,19 @@ def write_experiment_file(nlogo_file, exp_file):
             next_line = nlogo_file.readline()
         if next_line == '':
             print 'No experiments in this file'
-            return False
+            return []
         elif next_line == '<experiments>\n':
             # Copy over all lines in the BehaviorSpace section to the xml file.
             while next_line != '</experiments>\n':
                 exp_file.write(next_line)
                 next_line = nlogo_file.readline()
+#                 print next_line, next_line.count('name=')
+                if next_line.count('name=') != 0:
+                    name = next_line.split()[1][6:-1]
+#                     print name
+                    exp_list.append(name)
             exp_file.write(next_line)
-        return True
+        return exp_list
     except AttributeError:
         # If no files were chosen, catch error.
         print 'Please choose valid files and try again.'
