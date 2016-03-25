@@ -28,7 +28,7 @@ def write_experiment_file(nlogo_file, exp_file):
         while next_line != '' and next_line != '<experiments>\n':
             next_line = nlogo_file.readline()
         if next_line == '':
-            print 'No experiments in this file'
+            print ('No experiments in this file')
             return []
         elif next_line == '<experiments>\n':
             # Copy over all lines in the BehaviorSpace section to the xml file.
@@ -44,7 +44,7 @@ def write_experiment_file(nlogo_file, exp_file):
         return exp_list
     except AttributeError:
         # If no files were chosen, catch error.
-        print 'Please choose valid files and try again.'
+        print ('Please choose valid files and try again.')
         return False
     finally:
         # Clean up files if they are open.

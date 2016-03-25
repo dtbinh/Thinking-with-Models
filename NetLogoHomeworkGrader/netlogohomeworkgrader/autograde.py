@@ -60,10 +60,12 @@ import subprocess
 import getopt
 import os
 import csv
-from Tkinter import Tk
-from tkFileDialog import askdirectory, askopenfilename
+# from Tkinter import Tk
+# from tkFileDialog import askdirectory, askopenfilename
 from get_experiments import write_experiment_file
 from grade_files import grade_problem, get_problem_grade
+from subprocess import CalledProcessError, TimeoutExpired
+# from os import setpgrp
 # from Tkinter import tkMessageBox
 
 # Global values and names for running the script.
@@ -240,9 +242,11 @@ def record_grade(grade, student_id, hw_name, prob_name, grade_file_path):
     '''
     # Read the grade table completely out of the grade csv file.
     try:
-        with open(grade_file_path, 'rb') as grade_file:
+        with open(grade_file_path, 'r') as grade_file:
             grade_table = [row for row in csv.reader(grade_file)]
     except:
+        print("Error reading in grade_table")
+        print (sys.exc_info())
         grade_table = []
     # Add or change value in the grade table.
     col_name = hw_name + '.' + prob_name
@@ -269,14 +273,16 @@ def record_grade(grade, student_id, hw_name, prob_name, grade_file_path):
             grade_table[row_index][-1] = grade
     # Write the grade table back into grade csv file.
     try:
-        with open(grade_file_path, 'w+') as grade_file:
+        with open(grade_file_path, 'w+', newline='') as grade_file:
             grade_file_writer = csv.writer(grade_file)
+#             print(grade_table)
             for row in grade_table:
+#                 print(row)
                 grade_file_writer.writerow(row)
     # If there is an error, print out the info and return False.
     except IOError:
-        print 'Problem with writing to grade csv file.'
-        print sys.exc_info()
+        print('Problem with writing to grade csv file.')
+        print (sys.exc_info())
         return False
     return True
 
@@ -298,10 +304,14 @@ def grade(main_dir, netlogo_dir, answer_file, grade_only):
     
     # If creating files, create the experiment file.
     if not grade_only:
+        try: 
+            os.chdir(main_dir)
+            os.system('del *.csv')
+        except: print("Could not delete .csv files") 
         exp_list = write_experiment_file(
-                open(main_dir + answer_file),
+                open(main_dir + answer_file, 'r'),
                 open(main_dir + 'experiments.xml', 'w'))
-        print exp_list
+        print (exp_list)
     for i in range(2):
         # If creating files, Change to directory containing NetLogo.jar and call
         # system to produce csv answer file. Get path of answer file.
@@ -312,19 +322,27 @@ def grade(main_dir, netlogo_dir, answer_file, grade_only):
         
         # Grade student nlogo files.
         for h in os.listdir(main_dir):
-            print h
+            print (h)
             # Student subdirectories are identified as those directories which have
             # only digits in their names.
-            if (os.path.isfile(main_dir + h) and h.count('answers') == 0 and
-                    h.count('_') != 0):
+            if ((os.path.isfile(main_dir + h) and
+                    h.count('_') != 0)) :
                 stud_name = h.split('_')[0]
-                print stud_name
+                print (stud_name)
                 # If creating files, create student csv files from nlogo files.
     #             if not grade_only:
-                try: 
-                    subprocess.call([nlogo_command.format(h, exp_list[i], stud_name+exp_list[i]+'.csv')])
-                except OSError:
-                    print "Error in running student file"
+                try:
+                    cmd = nlogo_command.format(h, exp_list[i], stud_name+exp_list[i]+'.csv')
+                    print (cmd)
+#                     os.system(cmd)
+                    subprocess.check_call(cmd,shell=True,timeout=10)
+                except (OSError, CalledProcessError, TimeoutExpired) as e:
+                    print ("Error in running student file")
+                    # Appears that when it errors out, this command does not
+                    # exit, instead just blocking indefinitely
+                    # Furthermore, it apparently spawns orphan processes
+                    # which keep .csv data output files open indefinitely,
+                    # preventing deletion and further change
                 # Grade csv files against answer file and record grades.
                 stud_path = main_dir + stud_name+exp_list[i]+'.csv'
                 record_grade(get_problem_grade(grade_problem(ans_path, stud_path)),
@@ -374,7 +392,7 @@ def main(argv):
                 prob_num = arg
             # If not, print error message.
             else: 
-                print 'All -p or --prob_numbers arguments must be numbers\n'
+                print ('All -p or --prob_numbers arguments must be numbers\n')
                 print(__doc__)
                 sys.exit(2)
         elif opt in ('-m', '--main_dir'):
@@ -401,5 +419,15 @@ def main(argv):
     return grade(main_dir, netlogo_dir, answer_file, grade_only)
 
 if __name__ == '__main__':
-    # Runs the main method if run as main.
-    main(sys.argv[1:])
+    try:
+        main(sys.argv[1:])
+    finally:
+        # kill all the orphan processes -- couldn't find a better way
+        os.system('taskkill /F /IM java.exe')
+#     os.setpgrp() # create new process group, become its leader
+#     try:
+#         # Runs the main method if run as main.
+#         main(sys.argv[1:])  
+#     finally:
+#         os.killpg(0, signal.SIGKILL) # kill all processes in my group
+    

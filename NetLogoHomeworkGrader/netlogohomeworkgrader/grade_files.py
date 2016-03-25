@@ -30,7 +30,7 @@ def grade_problem(ans_path, stud_path):
             correct or not. If there is an IOerror, returns 0.
     '''
     try:
-        with open(ans_path) as ans, open(stud_path) as stud:
+        with open(ans_path, 'r+') as ans, open(stud_path, 'r+') as stud:
             # Skip first 6 lines (Not part of table).
             for _ in range(6):
                 ans.readline()
@@ -39,11 +39,11 @@ def grade_problem(ans_path, stud_path):
             ans_reader = csv.reader(ans)
             stud_reader = csv.reader(stud)
             # Store the list of the variable names.
-            var_names = ans.next()
+            var_names = ans.readline()
 #             print var_names, stud.next()
             # Make sure that both files have the same variables in the same order.
-            if var_names != stud.next(): 
-                print "Incorrect csv files: wrong variable names."
+            if var_names != stud.readline(): 
+                print ("Incorrect csv files: wrong variable names.")
                 return False
             # Check the rows against eachother and record a table of the results.
             grade_table = [[vals_equal(ans_val, stud_val) for ans_val, stud_val 
@@ -52,8 +52,8 @@ def grade_problem(ans_path, stud_path):
             return grade_table  
     # If fails, return 0 as a grade.
     except:
-        print "Problem with grading csv files."
-        print sys.exc_info()
+        print ("Problem with grading csv files.")
+        print (sys.exc_info())
         return 0
 
 def vals_equal(ans_val, stud_val):
@@ -128,7 +128,7 @@ def get_problem_grade(grade_table):
             else:
                 num_correct += cell
                 total_num += 1
-    if total_num == 0: return 0
-    elif total_num == num_correct: return 10
-    else: return 3
+    return round((num_correct*100)/(total_num), 0)
 #     else: return round(3 + ((num_correct/(float)(total_num)) * 7), 1)
+
+
